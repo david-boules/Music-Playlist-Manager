@@ -121,6 +121,13 @@ To set up and run the project locally:
 
 ---
 
+## Authors
+- David Boules
+- Hazem Ajlan
+- Zeiad Mohamed
+
+---
+
 ## License
 
 This project is for academic purposes only.
