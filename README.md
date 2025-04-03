@@ -10,30 +10,30 @@ The Music Playlist Manager simulates a real-world scenario where users can creat
 
 ## Features
 
-### 1. **Login**
+### 1. Login
 - Login with username and password.
 - Default admin account is created at the beginning.
 - **Only the admin** can create and manage user accounts.
 
-### 2. **Admin Page**
+### 2. Admin Page
 - **Admin Login** - Only the default admin account can access this page
 - **Add/Delete users** - Create new users (username, password, email) and delete users.
 - **Password validation** - Ensure passwords consists of 8 characters including numbers.
 - **User Storage** - Store user data in files
 - **View list of users** - Show a list of current users with an option to *delete accounts*, if needed.
 
-### 3. **User Dashboard**
+### 3. User Dashboard
 - **Personalized welcome message** with last played song.
 - **Summary statistics**: total playlists created, recent playlists accessed.
 - **Buttons** to create a new playlist, view playlists, search songs, and generate reports.
 
-### 4. **Playlist Management Page**
+### 4. Playlist Management Page
 - View all playlists in a table (Name, Number of Songs).
 - Playlist records stored in files
 - **Search functionality** (search playlists/songs by title)
 - **Edit playlist details** (e.g., add/delete songs, rename playlist)
 
-### 5. Playlist Creation Page**
+### 5. Playlist Creation Page
 - Input form to create new playlists
   - Enter playlist name (*must be* ***unique***)
   - Add songs to the playlist by *selecting from the existing library*
@@ -47,7 +47,7 @@ The Music Playlist Manager simulates a real-world scenario where users can creat
   - Album
 - Error handling for invalid inputs (e.g., *duplicate songs, empty fields*)
 
-### 7. **Reports Page**
+### 7. Reports Page
 - Generate user-specific **playlist usage reports** with information such as
   - Total playlists created by user
   - Most played songs
