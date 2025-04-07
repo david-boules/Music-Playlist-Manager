@@ -1,25 +1,22 @@
 #ifndef USER_H
 #define USER_H
-#include <QString>
-#include <vector>
 
-class User
+#include <QDialog>
+
+namespace Ui {
+class user;
+}
+
+class user : public QDialog
 {
-private:
-    QString username, password, email;
-    std::vector<User> users;
-
+    Q_OBJECT
 
 public:
-    User(QString name, QString pass, QString mail);
+    explicit user(QWidget *parent = nullptr);
+    ~user();
 
-    QString getUsername();
-    QString getPassword();
-    QString getEmail();
-    bool login(const QString& _username, const QString& _password);
-
-
+private:
+    Ui::user *ui;
 };
-
 
 #endif // USER_H

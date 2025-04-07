@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "user.h"
 #include <QMessageBox>
 #include <QVector>
 using namespace std;
@@ -52,7 +53,9 @@ void MainWindow::on_PushButton_login_clicked()
         }
         if(user_found){
             QMessageBox::information(this, "Login", "User Login Successful");
-            //display user dashboard
+            hide();
+            user *u = new user(this);
+            u->show();
         }
         else{
             QMessageBox::warning(this, "Login", "Invalid username or password");
