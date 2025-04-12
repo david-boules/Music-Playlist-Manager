@@ -18,6 +18,11 @@ public:
     static bool validateLogin(const QString &username, const QString &password);
     static void editAdminCredentials(const QString &new_username, const QString &new_password);
 
+private slots:
+    void on_pushButton_listUsers_clicked();
+
+    void on_pushButton_confirm_clicked();
+
 private:
     static QString admin_username;
     static QString admin_password;
