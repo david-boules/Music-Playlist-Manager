@@ -15,6 +15,8 @@ public:
     explicit User(QWidget *parent = nullptr);
     ~User();
 
+    static bool validateCredentials(const QString &username, const QString &password);
+
 private:
     Ui::User *ui;
 };

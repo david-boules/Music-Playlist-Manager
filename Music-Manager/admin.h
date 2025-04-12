@@ -15,7 +15,13 @@ public:
     explicit Admin(QWidget *parent = nullptr);
     ~Admin();
 
+    static bool validateLogin(const QString &username, const QString &password);
+    static void editAdminCredentials(const QString &new_username, const QString &new_password);
+
 private:
+    static QString admin_username;
+    static QString admin_password;
+
     Ui::Admin *ui;
 };
 
