@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "user.h"
+#include "admin.h"
 #include <QMessageBox>
 #include <QVector>
 using namespace std;
@@ -33,7 +34,10 @@ void MainWindow::on_PushButton_login_clicked()
 
     if(isAdmin){
         if(username == admin_username && password == admin_password){
-            //load admin page
+            QMessageBox::information(this, "Login", "Admin Login Successful");
+            hide();
+            Admin *a = new Admin(this);
+            a->show();
         }
         else{
             QMessageBox::warning(this, "Login", "Invalid admin username or password");
@@ -54,7 +58,7 @@ void MainWindow::on_PushButton_login_clicked()
         if(user_found){
             QMessageBox::information(this, "Login", "User Login Successful");
             hide();
-            user *u = new user(this);
+            User *u = new User(this);
             u->show();
         }
         else{

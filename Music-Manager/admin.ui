@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>User</class>
- <widget class="QDialog" name="User">
+ <class>Admin</class>
+ <widget class="QDialog" name="Admin">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -13,30 +13,17 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QLabel" name="label_welcome">
+  <widget class="QLabel" name="label_admin">
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>10</y>
-     <width>58</width>
+     <y>20</y>
+     <width>81</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>Welcome</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_summary">
-   <property name="geometry">
-    <rect>
-     <x>40</x>
-     <y>40</y>
-     <width>121</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Summary Statistics:</string>
+    <string>Admin Page</string>
    </property>
   </widget>
  </widget>

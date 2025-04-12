@@ -4,19 +4,19 @@
 #include <QDialog>
 
 namespace Ui {
-class user;
+class User;
 }
 
-class user : public QDialog
+class User : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit user(QWidget *parent = nullptr);
-    ~user();
+    explicit User(QWidget *parent = nullptr);
+    ~User();
 
 private:
-    Ui::user *ui;
+    Ui::User *ui;
 };
 
 #endif // USER_H

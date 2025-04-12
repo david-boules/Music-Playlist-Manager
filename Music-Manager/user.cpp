@@ -1,14 +1,14 @@
 #include "user.h"
 #include "ui_user.h"
 
-user::user(QWidget *parent)
+User::User(QWidget *parent)
     : QDialog(parent)
-    , ui(new Ui::user)
+    , ui(new Ui::User)
 {
     ui->setupUi(this);
 }
 
-user::~user()
+User::~User()
 {
     delete ui;
 }

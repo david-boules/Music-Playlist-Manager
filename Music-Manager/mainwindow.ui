@@ -128,6 +128,11 @@
      </property>
     </widget>
    </widget>
+   <zorder>login_groupbox</zorder>
+   <zorder>Label_username</zorder>
+   <zorder>Label_password</zorder>
+   <zorder>LineEdit_username</zorder>
+   <zorder>LineEdit_password</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
