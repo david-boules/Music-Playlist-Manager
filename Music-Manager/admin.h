@@ -17,10 +17,10 @@ public:
 
     static bool validateLogin(const QString &username, const QString &password);
     static void editAdminCredentials(const QString &new_username, const QString &new_password);
+    void clearLineEdits();
 
 private slots:
     void on_pushButton_listUsers_clicked();
-
     void on_pushButton_confirm_clicked();
 
 private:
