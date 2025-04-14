@@ -14,6 +14,7 @@ class User : public QDialog
 
 public:
     explicit User(QString username, QString password, QWidget *parent = nullptr);
+    static bool validateCredentials(const QString &username, const QString &password);
     ~User();
 
 private slots:
