@@ -46,7 +46,7 @@ void MainWindow::on_PushButton_login_clicked()
         if (User::validateCredentials(username, password)){
             QMessageBox::information(this, "Login", "User Login Successful");
             hide();
-            User *u = new User(this);
+            User *u = new User(username, password, this);
             u->show();
             }
 

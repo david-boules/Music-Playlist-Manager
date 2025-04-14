@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Welcome</string>
+    <string>Welcome </string>
    </property>
   </widget>
   <widget class="QLabel" name="label_summary">
@@ -36,7 +36,59 @@
     </rect>
    </property>
    <property name="text">
-    <string>Summary Statistics:</string>
+    <string>Summary Statistics: </string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="createPlaylist">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>120</y>
+     <width>100</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="searchSongs">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>120</y>
+     <width>100</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>PushButton</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="viewPlaylist">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>120</y>
+     <width>100</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>PushButton</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_lastPlayedSong">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>80</y>
+     <width>141</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Last Played Song: </string>
    </property>
   </widget>
  </widget>
