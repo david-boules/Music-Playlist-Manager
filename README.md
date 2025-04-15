@@ -125,6 +125,7 @@ To set up and run the project locally:
 - David Boules
 - Hazem Ajlan
 - Zeiad Mohamed
+- Ali Gawad
 
 ---
 
