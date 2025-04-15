@@ -1,3 +1,8 @@
+/*
+To-Do:
+- Implement 'back' button to go back to main window
+ */
+
 #include "admin.h"
 #include "ui_admin.h"
 #include <QMessageBox>

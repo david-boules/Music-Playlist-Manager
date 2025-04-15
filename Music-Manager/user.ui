@@ -49,7 +49,7 @@
     </rect>
    </property>
    <property name="text">
-    <string/>
+    <string>Create Playlist</string>
    </property>
   </widget>
   <widget class="QPushButton" name="searchSongs">
@@ -62,7 +62,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>PushButton</string>
+    <string>Search Songs</string>
    </property>
   </widget>
   <widget class="QPushButton" name="viewPlaylist">
@@ -75,7 +75,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>PushButton</string>
+    <string>View Playlists</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_lastPlayedSong">

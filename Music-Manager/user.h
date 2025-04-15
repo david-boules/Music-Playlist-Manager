@@ -1,8 +1,10 @@
 #ifndef USER_H
 #define USER_H
 
-#include <QDialog>
 #include <QMessageBox>
+#include <QDialog>
+#include <QString>
+#include <QVector>
 
 namespace Ui {
 class User;
@@ -15,6 +17,11 @@ class User : public QDialog
 public:
     explicit User(QString username, QString password, QWidget *parent = nullptr);
     static bool validateCredentials(const QString &username, const QString &password);
+
+    void loadUserData();
+    QString getLastPlayedSong();
+    QString getAllPlaylists();
+
     ~User();
 
 private slots:
@@ -26,10 +33,8 @@ private slots:
 
 private:
     Ui::User *ui;
-    QString UserName, Password;
-    void loadUserData();
-    QString getLastPlayedSong();
-    int getAllPlaylists();
+    QString UserName;
+    QString Password;
 };
 
 #endif // USER_H

@@ -41,8 +41,7 @@ void MainWindow::on_PushButton_login_clicked()
 
     else if(isUser){
 
-        //loop over all user names and passwords
-
+        // validateCredentials should loop over all user names and passwords to check for match
         if (User::validateCredentials(username, password)){
             QMessageBox::information(this, "Login", "User Login Successful");
             hide();
