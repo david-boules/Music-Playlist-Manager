@@ -115,16 +115,12 @@ To set up and run the project locally:
 
 ---
 
-## UML Class Diagram
-
-> *(UML diagram illustrating OOP design will be pasted here once finalized.)*
-
----
 
 ## Authors
 - David Boules
 - Hazem Ajlan
 - Zeiad Mohamed
+- Ali Gawad
 
 ---
 
