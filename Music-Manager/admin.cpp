@@ -5,6 +5,7 @@ To-Do:
 
 #include "admin.h"
 #include "ui_admin.h"
+#include "songpage.h"
 #include <QMessageBox>
 #include <QFile>
 #include <QDir>
@@ -160,3 +161,11 @@ void Admin::on_pushButton_listUsers_clicked()
 
     file.close();
 }
+
+void Admin::on_CreateSong_clicked()
+{
+    SongPage *songpage= new SongPage();
+    songpage->show();
+    this->close();
+}
+

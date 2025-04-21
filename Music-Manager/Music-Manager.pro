@@ -12,16 +12,19 @@ SOURCES += \
     admin.cpp \
     main.cpp \
     mainwindow.cpp \
+    songpage.cpp \
     user.cpp
 
 HEADERS += \
     admin.h \
     mainwindow.h \
+    songpage.h \
     user.h
 
 FORMS += \
     admin.ui \
     mainwindow.ui \
+    songpage.ui \
     user.ui
 
 # Default rules for deployment.
