@@ -12,18 +12,21 @@ SOURCES += \
     admin.cpp \
     main.cpp \
     mainwindow.cpp \
+    playlistmanagement.cpp \
     songpage.cpp \
     user.cpp
 
 HEADERS += \
     admin.h \
     mainwindow.h \
+    playlistmanagement.h \
     songpage.h \
     user.h
 
 FORMS += \
     admin.ui \
     mainwindow.ui \
+    playlistmanagement.ui \
     songpage.ui \
     user.ui
 
