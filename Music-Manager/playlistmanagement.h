@@ -22,6 +22,8 @@ public:
     Song2(QString t = "", QString a = "", QString d = "") : title(t), artist(a), duration(d) {}
 };
 
+
+
 class Playlist {
 public:
     QString name;
@@ -38,7 +40,10 @@ public:
         }
     }
     int songCount() const {return songs.size();}
+};
 
+class PlaylistManager {
+public:
     QVector<Playlist> playlists;
 
     bool loadFromFile(const QString &filename);
@@ -71,7 +76,7 @@ private slots:
     void on_DeleteSong_clicked();
 
 private:
-    Playlist manager;
+    PlaylistManager manager;
     QLabel *playlistDisplay;
     QLabel *songDisplay;
     QString currentPlaylistName;
