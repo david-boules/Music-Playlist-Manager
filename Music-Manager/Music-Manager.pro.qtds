@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtDesignStudio 4.7.0, 2025-04-15T11:37:23. -->
+<!-- Written by QtDesignStudio 4.7.0, 2025-04-23T19:57:47. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -135,7 +135,6 @@
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/Users/kareem/Desktop/University/4 - Spring '25/CSCE 1101/CSCE1102/Music-Playlist-Manager/Music-Manager/build/Qt_6_8_2_for_macOS-Debug/Music-Manager.app/Contents/MacOS</value>
    </valuemap>
    <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>

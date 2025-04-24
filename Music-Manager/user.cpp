@@ -1,10 +1,12 @@
 /*
 To-Do:
 - Implement 'back' button to go back to main window
-- Fix 'validateCredentials' function to look for username/password matches in 'users.txt' to allow login
+- Fix 'validateCredentials' function to look for username/password matches in 'users.txt'
 - Flesh-Out all user functions
  */
 
+#include "playlistcreator.h"
+#include "playlistmanagement.h"
 #include "user.h"
 #include "ui_user.h"
 #include <fstream>
@@ -41,7 +43,9 @@ bool User::validateCredentials(const QString &username, const QString &password)
 }
 
 void User::on_createPlaylist_clicked() {
-    QMessageBox::about(this, "Playlist", "Create Playlist");
+    hide();
+    PlaylistCreator *pc = new PlaylistCreator(this);
+    pc->show();
 }
 
 void User::on_searchSongs_clicked() {
@@ -49,7 +53,9 @@ void User::on_searchSongs_clicked() {
 }
 
 void User::on_viewPlaylist_clicked() {
-    QMessageBox::about(this, "Playlist", "View Playlists");
+    hide();
+    PlaylistManagement *pm = new PlaylistManagement(this);
+    pm->show();
 }
 
 QString User::getLastPlayedSong() {

@@ -1,154 +1,130 @@
 #include "playlistmanagement.h"
 #include "ui_playlistmanagement.h"
+#include "playlist.h"
+#include <QInputDialog>
+#include <QFile>
+#include <QTextStream>
+#include <QMessageBox>
 
-playlistmanagement::playlistmanagement(QWidget *parent)
-    : QDialog(parent)
-    , ui(new Ui::playlistmanagement)
+PlaylistManagement::PlaylistManagement(QWidget *parent)
+    : QDialog(parent), ui(new Ui::PlaylistManagement)
 {
     ui->setupUi(this);
+    loadFromFile("playlists.txt");
+    loadPlaylistsToText();
 }
 
-playlistmanagement::~playlistmanagement()
+PlaylistManagement::~PlaylistManagement()
 {
     delete ui;
 }
 
-void playlistmanagement::loadPlaylistsToText()
+void PlaylistManagement::loadPlaylistsToText()
 {
     QString display;
-    for (int i = 0; i < manager.playlists.size(); i++)
-    {
-        const Playlist &p = manager.playlists[i];
-        display += p.name + " (" + QString::number(p.songCount()) + " songs)\n";
-    }
-    playlistDisplay->setText(display);
+    for (const Playlist& p : playlists)
+        display += p.getName() + " (" + QString::number(p.numSongs()) + " songs)\n";
+    ui->playlistDisplay->setText(display);
 }
 
-
-void playlistmanagement::addPlaylist()
+void PlaylistManagement::refreshSongList(const Playlist &p)
 {
-    QString name = QInputDialog::getText(this, "Add Playlist", "Enter playlist name:");
-    if (name.isEmpty())
-        return;
-    manager.playlists.append(Playlist(name));
-    manager.saveToFile("playlists.txt");
+    QString display;
+    for (const Song& s : p.getSongs()) {
+        display += s.getTitle() + " by " + s.getArtist() + " (" + s.getDuration() + ")\n";
+    }
+    ui->songDisplay->setText(display);
+}
+
+void PlaylistManagement::on_AddPlaylist_clicked()
+{
+    QString name = QInputDialog::getText(this, "Add Playlist", "Enter name:");
+    if (name.isEmpty()) return;
+    playlists.append(Playlist(name));
+    saveToFile("playlists.txt");
     loadPlaylistsToText();
 }
 
-
-void playlistmanagement::deletePlaylist()
+void PlaylistManagement::on_DeletePlaylist_clicked()
 {
     QString name = QInputDialog::getText(this, "Delete Playlist", "Enter playlist name to delete:");
-    for (int i = 0; i < manager.playlists.size(); i++)
-    {
-        if (manager.playlists[i].name == name)
-        {
-            manager.playlists.removeAt(i);
+    for (int i = 0; i < playlists.size(); ++i) {
+        if (playlists[i].getName() == name) {
+            playlists.removeAt(i);
             break;
         }
     }
-    manager.saveToFile("playlists.txt");
+    saveToFile("playlists.txt");
     loadPlaylistsToText();
 }
 
-void playlistmanagement::refreshSongList(const Playlist &p) {
-    QString display;
-    for (int i = 0; i < p.songs.size(); i++) {
-        const Song2 &s = p.songs[i];
-        display += s.title + " by " + s.artist + " (" + s.duration + ")\n";
-    }
-    songDisplay->setText(display);
-}
-
-void playlistmanagement::addSong2()
+void PlaylistManagement::on_AddSong_clicked()
 {
     QString name = QInputDialog::getText(this, "Playlist", "Enter playlist name:");
-   Playlist *p = manager.getPlaylist(name);
-   if (!p)
-    return;
+    Playlist* p = getPlaylist(name);
+    if (!p) return;
 
-    QString title = QInputDialog::getText(this, "Add Song", "Title:");
-    QString artist = QInputDialog::getText(this, "Add Song", "Artist:");
-    QString duration = QInputDialog::getText(this, "Add Song", "Duration:");
+    QString title = QInputDialog::getText(this, "Title", "Title:");
+    QString artist = QInputDialog::getText(this, "Artist", "Artist:");
+    QString album = QInputDialog::getText(this, "Album", "Album:");
+    QString duration = QInputDialog::getText(this, "Duration", "Duration:");
 
-    p->addSong(Song2(title, artist, duration));
-    manager.saveToFile("playlists.txt"); //fix error
+    p->addSong(Song(title, artist, album, duration));
+    saveToFile("playlists.txt");
     refreshSongList(*p);
 }
 
-void playlistmanagement::deleteSong()
+void PlaylistManagement::on_DeleteSong_clicked()
 {
     QString name = QInputDialog::getText(this, "Playlist", "Enter playlist name:");
-   Playlist *p = manager.getPlaylist(name);
-   if (!p)
-       return;
+    Playlist* p = getPlaylist(name);
+    if (!p) return;
 
-   QString title = QInputDialog::getText(this, "Delete Song", "Title to delete:");
-   p->deleteSong(title);
-   manager.saveToFile("playlists.txt");
-   refreshSongList(*p);
+    QString title = QInputDialog::getText(this, "Delete Song", "Title to delete:");
+    p->deleteSong(title);
+    saveToFile("playlists.txt");
+    refreshSongList(*p);
 }
 
-bool PlaylistManager::saveToFile(const QString &filename)
+Playlist* PlaylistManagement::getPlaylist(const QString &name)
+{
+    for (Playlist &p : playlists)
+        if (p.getName() == name)
+            return &p;
+    return nullptr;
+}
+
+bool PlaylistManagement::saveToFile(const QString &filename)
 {
     QFile file(filename);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) return false;
 
     QTextStream out(&file);
-    for (int i = 0; i < playlists.size(); i++)
-    {
-        const Playlist &pl = playlists[i];
-        out << "#" << pl.name << "\n";
-        for (int j = 0; j < pl.songs.size(); j++)
-        {
-            const Song2 &s = pl.songs[j];
-            out << s.title << "," << s.artist << "," << s.duration << "\n";
-        }
+    for (const Playlist& pl : playlists) {
+        out << "#" << pl.getName() << "\n";
+        for (const Song& s : pl.getSongs())
+            out << s.getTitle() << "," << s.getArtist() << "," << s.getAlbum() << "," << s.getDuration() << "\n";
     }
     return true;
 }
 
-Playlist* PlaylistManager::getPlaylist(const QString &name)
+bool PlaylistManagement::loadFromFile(const QString &filename)
 {
-    for (int i = 0; i < playlists.size(); i++)
-    {
-        if (playlists[i].name == name)
-            return &playlists[i];
+    QFile file(filename);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return false;
+
+    QTextStream in(&file);
+    Playlist *current = nullptr;
+    while (!in.atEnd()) {
+        QString line = in.readLine().trimmed();
+        if (line.startsWith("#")) {
+            playlists.append(Playlist(line.mid(1)));
+            current = &playlists.last();
+        } else if (current) {
+            QStringList parts = line.split(",");
+            if (parts.size() == 4)
+                current->addSong(Song(parts[0], parts[1], parts[2], parts[3]));
+        }
     }
-    return nullptr;
+    return true;
 }
-
-void playlistmanagement::displaySongs()
-{
-        QString name = QInputDialog::getText(this, "Display Songs", "Enter playlist name:");
-        Playlist *p = manager.getPlaylist(name);
-        if (p)
-        {
-            refreshSongList(*p);
-        }
-        else
-        {
-            QMessageBox::warning(this, "Error", "Playlist not found.");
-        }
-}
-
-void playlistmanagement::on_AddPlaylist_clicked()
-{
-    addPlaylist();
-}
-
-void playlistmanagement::on_DeletePlaylist_clicked()
-{
-    deletePlaylist();
-}
-
-void playlistmanagement::on_AddSong_clicked()
-{
-    addSong2();
-
-}
-
-void playlistmanagement::on_DeleteSong_clicked()
-{
-    deleteSong();
-}
-

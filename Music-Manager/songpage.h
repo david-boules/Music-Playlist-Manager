@@ -2,35 +2,13 @@
 #define SONGPAGE_H
 
 #include <QDialog>
-#include <QList>
 #include <QListWidget>
-
+#include <QVector>
+#include "song.h"
 
 namespace Ui {
 class SongPage;
 }
-struct Song {
-    QString title;
-    QString artist;
-    QString album;
-    Song* next;
-};
-class Songs {
-public:
-    Song* head;
-
-    Songs();
-
-
-    void addSong(QString title, QString artist, QString album);
-
-    void displaySongsInListWidget(QListWidget* listWidget);
-
-    void saveSongs();
-
-    void loadSongs();
-};
-
 
 class SongPage : public QDialog
 {
@@ -40,14 +18,16 @@ public:
     explicit SongPage(QWidget *parent = nullptr);
     ~SongPage();
 
+    void loadSongs();
+    void saveSongs();
+    void displaySongs();
+
 private slots:
     void on_pushButton_clicked();
 
-
-
 private:
     Ui::SongPage *ui;
-    Songs songs;
+    QVector<Song> songLibrary;
 };
 
 #endif // SONGPAGE_H

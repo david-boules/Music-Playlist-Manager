@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>playlistmanagement</class>
- <widget class="QDialog" name="playlistmanagement">
+ <class>PlaylistManagement</class>
+ <widget class="QDialog" name="PlaylistManagement">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -65,23 +65,23 @@
     <string>Delete Song</string>
    </property>
   </widget>
-  <widget class="QListWidget" name="DisplayPlaylist">
+  <widget class="QTextEdit" name="playlistDisplay">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>0</y>
-     <width>201</width>
-     <height>151</height>
+     <x>180</x>
+     <y>20</y>
+     <width>181</width>
+     <height>121</height>
     </rect>
    </property>
   </widget>
-  <widget class="QListWidget" name="DisplaySong">
+  <widget class="QTextEdit" name="songDisplay">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>160</y>
-     <width>211</width>
-     <height>141</height>
+     <x>180</x>
+     <y>170</y>
+     <width>181</width>
+     <height>121</height>
     </rect>
    </property>
   </widget>

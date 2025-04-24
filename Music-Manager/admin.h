@@ -22,7 +22,6 @@ public:
 private slots:
     void on_pushButton_listUsers_clicked();
     void on_pushButton_confirm_clicked();
-
     void on_CreateSong_clicked();
 
 private:

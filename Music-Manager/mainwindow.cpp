@@ -4,7 +4,6 @@
 #include "admin.h"
 #include <QMessageBox>
 #include <QVector>
-using namespace std;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
