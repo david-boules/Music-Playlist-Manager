@@ -18,6 +18,7 @@ SOURCES += \
     playlist.cpp \
     playlistcreator.cpp \
     playlistmanagement.cpp \
+    reports.cpp \
     song.cpp \
     songpage.cpp \
     user.cpp
@@ -28,6 +29,7 @@ HEADERS += \
     playlist.h \
     playlistcreator.h \
     playlistmanagement.h \
+    reports.h \
     song.h \
     songpage.h \
     user.h
@@ -37,6 +39,7 @@ FORMS += \
     mainwindow.ui \
     playlistcreator.ui \
     playlistmanagement.ui \
+    reports.ui \
     songpage.ui \
     user.ui
 

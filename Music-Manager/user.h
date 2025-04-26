@@ -32,9 +32,11 @@ private slots:
 
     void on_searchSongs_clicked();
 
-    void on_viewPlaylist_clicked();
+    void on_viewPlaylists_clicked();
 
     void on_pushButton_back_clicked();
+
+    void on_userReports_clicked();
 
 private:
     Ui::User *ui;

@@ -1,9 +1,3 @@
-/*
-To-Do:
-- Implement 'back' button to go back to main window
-- Ensuring 'Create Song' button fully works
- */
-
 // admin username: admin | admin password: admin123
 
 #include "admin.h"

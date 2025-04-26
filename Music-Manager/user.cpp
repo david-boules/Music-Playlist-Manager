@@ -1,15 +1,8 @@
-/*
-To-Do:
-- Implement 'back' button to go back to main window
-- Fix 'validateCredentials' function to look for username/password matches in 'users.txt'
-- Flesh-Out all user functions
- */
-
 #include "playlistcreator.h"
 #include "playlistmanagement.h"
+#include "reports.h"
 #include "user.h"
 #include "ui_user.h"
-#include <fstream>
 #include <QFile>
 #include <QFileInfo>
 #include <QMessageBox>
@@ -23,9 +16,7 @@ User::User(QString username, QString password, QWidget *parent)
     , ui(new Ui::User)
 {
     ui->setupUi(this);
-    ui->label_welcome->setText("Welcome " + username);
-    ui->label_lastPlayedSong->setText("Last Played Song: " + getLastPlayedSong());
-    ui->label_summary->setText("Total Playlists: " + getAllPlaylists());
+    ui->label_welcome->setText("Welcome, " + username + "! Last Played Song: " + getLastPlayedSong());
 }
 User::~User()
 {
@@ -119,11 +110,18 @@ void User::on_createPlaylist_clicked() {
     pc->show();
 }
 
+void User::on_userReports_clicked()
+{
+    hide();
+    Reports *r = new Reports(this);
+    r->show();
+}
+
 void User::on_searchSongs_clicked() {
     QMessageBox::about(this, "Search", "Search Songs");
 }
 
-void User::on_viewPlaylist_clicked() {
+void User::on_viewPlaylists_clicked() {
     hide();
     PlaylistManagement *pm = new PlaylistManagement(this);
     pm->show();
@@ -147,4 +145,3 @@ void User::on_pushButton_back_clicked()
         parentWidget()->show(); //therefore can be used to go back
     }
 }
-
