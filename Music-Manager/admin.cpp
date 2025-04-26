@@ -190,7 +190,7 @@ void Admin::on_pushButton_listUsers_clicked()
 void Admin::on_CreateSong_clicked()
 {
     hide();
-    SongPage *songpage= new SongPage();
+    SongPage *songpage= new SongPage(this);
     songpage->show();
 }
 
