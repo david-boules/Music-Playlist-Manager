@@ -33,6 +33,8 @@ private slots:
 
     void on_viewPlaylist_clicked();
 
+    void on_pushButton_back_clicked();
+
 private:
     Ui::User *ui;
     QString UserName;

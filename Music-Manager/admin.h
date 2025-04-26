@@ -24,6 +24,8 @@ private slots:
     void on_pushButton_confirm_clicked();
     void on_CreateSong_clicked();
 
+    void on_pushButton_back_clicked();
+
 private:
     static QString admin_username;
     static QString admin_password;

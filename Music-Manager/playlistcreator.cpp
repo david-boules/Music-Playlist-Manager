@@ -70,3 +70,12 @@ void PlaylistCreator::on_createPlaylistButton_clicked(){
     QMessageBox::information(this, "Success", "Playlist saved successfully.");
 }
 
+
+void PlaylistCreator::on_pushButton_back_clicked()
+{
+    this->close();
+    if (parentWidget()) { //returns a pointer to the widget that opened the current window (checking to make sure a parent exists)
+        parentWidget()->show(); //therefore can be used to go back
+    }
+}
+

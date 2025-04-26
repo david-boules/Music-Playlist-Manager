@@ -189,8 +189,16 @@ void Admin::on_pushButton_listUsers_clicked()
 
 void Admin::on_CreateSong_clicked()
 {
+    hide();
     SongPage *songpage= new SongPage();
     songpage->show();
-    this->close();
 }
 
+
+void Admin::on_pushButton_back_clicked()
+{
+    this->close();
+    if (parentWidget()) { //returns a pointer to the widget that opened the current window (checking to make sure a parent exists)
+        parentWidget()->show(); //therefore can be used to go back
+    }
+}

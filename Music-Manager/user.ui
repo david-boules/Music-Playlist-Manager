@@ -16,8 +16,8 @@
   <widget class="QLabel" name="label_welcome">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>10</y>
+     <x>30</x>
+     <y>60</y>
      <width>58</width>
      <height>16</height>
     </rect>
@@ -29,8 +29,8 @@
   <widget class="QLabel" name="label_summary">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>40</y>
+     <x>30</x>
+     <y>90</y>
      <width>121</width>
      <height>21</height>
     </rect>
@@ -42,8 +42,8 @@
   <widget class="QPushButton" name="createPlaylist">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>120</y>
+     <x>20</x>
+     <y>170</y>
      <width>100</width>
      <height>32</height>
     </rect>
@@ -55,8 +55,8 @@
   <widget class="QPushButton" name="searchSongs">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>120</y>
+     <x>140</x>
+     <y>170</y>
      <width>100</width>
      <height>32</height>
     </rect>
@@ -68,8 +68,8 @@
   <widget class="QPushButton" name="viewPlaylist">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>120</y>
+     <x>250</x>
+     <y>170</y>
      <width>100</width>
      <height>32</height>
     </rect>
@@ -81,14 +81,27 @@
   <widget class="QLabel" name="label_lastPlayedSong">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>80</y>
+     <x>30</x>
+     <y>130</y>
      <width>141</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
     <string>Last Played Song: </string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_back">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>71</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Back</string>
    </property>
   </widget>
  </widget>

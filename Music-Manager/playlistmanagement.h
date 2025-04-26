@@ -25,6 +25,8 @@ private slots:
     void on_AddSong_clicked();
     void on_DeleteSong_clicked();
 
+    void on_pushButton_back_clicked();
+
 private:
     Ui::PlaylistManagement *ui;
 

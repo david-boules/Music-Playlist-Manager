@@ -76,3 +76,12 @@ void SongPage::displaySongs()
     for (const Song& s : songLibrary)
         ui->listWidget_songs->addItem(s.getTitle() + " - " + s.getArtist() + " [" + s.getAlbum() + "] (" + s.getDuration() + ")");
 }
+
+void SongPage::on_pushButton_back_clicked()
+{
+    this->close();
+    if (parentWidget()) { //returns a pointer to the widget that opened the current window (checking to make sure a parent exists)
+        parentWidget()->show(); //therefore can be used to go back
+    }
+}
+

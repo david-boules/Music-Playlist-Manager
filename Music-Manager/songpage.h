@@ -25,6 +25,8 @@ public:
 private slots:
     void on_pushButton_clicked();
 
+    void on_pushButton_back_clicked();
+
 private:
     Ui::SongPage *ui;
     QVector<Song> songLibrary;

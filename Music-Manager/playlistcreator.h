@@ -24,6 +24,8 @@ public:
 private slots:
     void on_createPlaylistButton_clicked();
 
+    void on_pushButton_back_clicked();
+
 private:
     Ui::PlaylistCreator *ui;
     QVector<Song> songLibrary;
