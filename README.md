@@ -83,7 +83,7 @@ To set up and run the project locally:
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/your-username/music-playlist-manager.git
+   git clone https://github.com/david-boules/music-playlist-manager.git
    cd music-playlist-manager
    ```
 
