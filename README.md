@@ -57,8 +57,8 @@ The Music Playlist Manager simulates a real-world scenario where users can creat
 
 ## User Roles
 
-- **Admin:** Full access to user and playlist management.
-- **Regular User:** Manage own playlists and generate personal reports.
+- **Admin:** Full access to user and playlist management (username: admin, password: admin123).
+- **User:** Manage own playlists and generate personal reports(create a user from the admin page).
 
 ---
 
@@ -83,7 +83,7 @@ To set up and run the project locally:
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/your-username/music-playlist-manager.git
+   git clone https://github.com/david-boules/music-playlist-manager.git
    cd music-playlist-manager
    ```
 
