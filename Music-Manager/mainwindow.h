@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QString>
+#include <QMap>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -16,6 +17,9 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
+
+    void loadUsers();
+
     ~MainWindow();
 
 private slots:

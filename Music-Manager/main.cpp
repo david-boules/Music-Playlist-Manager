@@ -1,10 +1,14 @@
 #include "mainwindow.h"
+#include "user.h"
 
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    User::loadUsers(); //Users are loaded in at system startup
+
     MainWindow w;
     w.show();
     return a.exec();

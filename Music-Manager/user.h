@@ -18,7 +18,9 @@ public:
     explicit User(QString username, QString password, QWidget *parent = nullptr);
     static bool validateCredentials(const QString &username, const QString &password);
 
-    void loadUserData();
+    static void loadUsers();
+    static void saveUsers();
+
     QString getLastPlayedSong();
     QString getAllPlaylists();
 
@@ -35,6 +37,7 @@ private:
     Ui::User *ui;
     QString UserName;
     QString Password;
+    static QMap<QString, QString> usernames_and_passwords;
 };
 
 #endif // USER_H

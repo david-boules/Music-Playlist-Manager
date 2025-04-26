@@ -8,6 +8,7 @@ To-Do:
 
 #include "admin.h"
 #include "ui_admin.h"
+#include "user.h"
 #include "songpage.h"
 #include <QMessageBox>
 #include <QFile>
@@ -64,8 +65,12 @@ void Admin::on_pushButton_confirm_clicked(){
         return;
     }
 
-    QString path = QDir::currentPath() + "/users.txt";
-    qDebug() << "[DEBUG] Using users.txt path:" << QFileInfo(path).absoluteFilePath();
+    QString path = QCoreApplication::applicationDirPath() + "/users.txt";
+    if (!QFile::exists(path)) {
+#ifdef Q_OS_MAC
+        path = QCoreApplication::applicationDirPath() + "/../../../../../users.txt";
+#endif
+    }
 
     if (add_user) {
         QFile readFile(path);
@@ -73,7 +78,7 @@ void Admin::on_pushButton_confirm_clicked(){
             QTextStream in(&readFile);
             while (!in.atEnd()) {
                 QString line = in.readLine();
-                QStringList fields = line.split(",");
+                QStringList fields = line.split(" ");
                 if (fields.size() >= 1 && fields[0] == username) {
                     QMessageBox::warning(this, "Duplicate User", "Username already exists!");
                     readFile.close();
@@ -84,23 +89,31 @@ void Admin::on_pushButton_confirm_clicked(){
         }
 
         QFile writeFile(path);
-        if (!writeFile.open(QFile::WriteOnly | QFile::Text | QFile::Append)) {
+        if (!writeFile.open(QFile::Append| QFile::Text)) {
             QMessageBox::warning(this, "Warning", "Could not open file for writing.");
             return;
         }
 
         QTextStream out(&writeFile);
-        out << username << "," << password << "," << email << "\n";
+        out << username << " " << password << " " << email << "\n";
         writeFile.flush();
         writeFile.close();
 
         QMessageBox::information(this, "Success", "User added successfully!");
+        User::loadUsers();
         clearLineEdits();
     }
 
     else if (delete_user) {
         QFile file(path);
         QFile tempFile(QDir::currentPath() + "/users_temp.txt");
+        if (!file.exists()) {
+#ifdef Q_OS_MAC
+            path = QCoreApplication::applicationDirPath() + "/../../../../../users.txt";
+            file.setFileName(path);
+            tempFile.setFileName(QCoreApplication::applicationDirPath() + "/../../../../../users_temp.txt");
+        }
+#endif
 
         if (!file.open(QFile::ReadOnly | QFile::Text) || !tempFile.open(QFile::WriteOnly | QFile::Text)) {
             QMessageBox::warning(this, "Warning", "Could not open file.");
@@ -113,8 +126,8 @@ void Admin::on_pushButton_confirm_clicked(){
 
         while (!ifile.atEnd()) {
             QString line = ifile.readLine();
-            QStringList fields = line.split(",");
-            if (fields.size() >= 1 && fields[0] == username) {
+            QStringList fields = line.split(" ");
+            if (fields.size() >= 1 && fields[0] == username && fields[1] == password) {
                 found = true;
                 continue;
             }
@@ -129,8 +142,9 @@ void Admin::on_pushButton_confirm_clicked(){
 
         if (found) {
             QMessageBox::information(this, "Success", "User deleted successfully");
+            User::loadUsers();
         } else {
-            QMessageBox::warning(this, "Not Found", "Username not found");
+            QMessageBox::warning(this, "Not Found", "Incorrect Username or Password");
         }
 
         clearLineEdits();
@@ -143,8 +157,16 @@ void Admin::on_pushButton_confirm_clicked(){
 
 void Admin::on_pushButton_listUsers_clicked()
 {
-    QString path = QDir::currentPath() + "/users.txt";
+    QString path = QCoreApplication::applicationDirPath() + "/users.txt";
     QFile file(path);
+
+    if (!file.exists()) {
+#ifdef Q_OS_MAC
+        path = QCoreApplication::applicationDirPath() + "/../../../../../users.txt";
+        file.setFileName(path);
+#endif
+    }
+
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
         QMessageBox::warning(this, "Warning", "Could not open file.");
         return;
@@ -155,7 +177,7 @@ void Admin::on_pushButton_listUsers_clicked()
 
     while (!users.atEnd()) {
         QString line = users.readLine();
-        QStringList fields = line.split(",");
+        QStringList fields = line.split(" ");
         if (fields.size() >= 3) {
             QString display = "Username: " + fields[0] + " | Password: " + fields[1] + " | Email: " + fields[2];
             ui->listWidget_users->addItem(display);
