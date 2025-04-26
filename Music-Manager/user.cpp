@@ -32,6 +32,10 @@ User::~User()
     delete ui;
 }
 
+bool User::usernameExists(const QString& username) {
+    return usernames_and_passwords.contains(username);
+}
+
 // Loading user info to the 'usernames_and_passwords' map at startup
 void User::loadUsers() {
     QString filePath = QCoreApplication::applicationDirPath() + "/users.txt";
@@ -126,35 +130,14 @@ void User::on_viewPlaylist_clicked() {
 }
 
 QString User::getLastPlayedSong() {
-    ifstream inputFile("grades.txt"); // Open the log file
-
-    if (!inputFile.is_open()) {
-        QMessageBox::warning(this, "Warning", "Could not open the file.");
+    //not working yet
         return "N/A";
     }
 
-    string line;
-    string prefix = UserName.toStdString() + "-LastPlayed:"; //create new copy the underlying string no
-
-    // Search for a line that starts with "username-LastPlayed:"
-    while (getline(inputFile, line)) {
-        // Check if the line begins with "username-LastPlayed:"
-        if (line.rfind(prefix, 0) == 0)  {
-            size_t colonPos = line.find(':');
-            if (colonPos != string::npos) {
-                // Extract part after colon
-                return QString::fromStdString(line.substr(colonPos + 1)); //Extract song name by returning what is after the colon
-            }
-        }
-    }
-
-    inputFile.close();
-    return "N/A"; // If nothing found
-}
-
 // type must be changed
 QString User::getAllPlaylists() {
-    return "";
+    //not working yet
+    return "N/A";
 }
 
 void User::on_pushButton_back_clicked()

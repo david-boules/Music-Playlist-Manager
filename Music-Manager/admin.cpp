@@ -73,23 +73,13 @@ void Admin::on_pushButton_confirm_clicked(){
     }
 
     if (add_user) {
-        QFile readFile(path);
-        if (readFile.open(QFile::ReadOnly | QFile::Text)) {
-            QTextStream in(&readFile);
-            while (!in.atEnd()) {
-                QString line = in.readLine();
-                QStringList fields = line.split(" ");
-                if (fields.size() >= 1 && fields[0] == username) {
-                    QMessageBox::warning(this, "Duplicate User", "Username already exists!");
-                    readFile.close();
-                    return;
-                }
-            }
-            readFile.close();
+        if (User::usernameExists(username)) {
+            QMessageBox::warning(this, "Duplicate User", "Username already exists!");
+            return;
         }
 
         QFile writeFile(path);
-        if (!writeFile.open(QFile::Append| QFile::Text)) {
+        if (!writeFile.open(QFile::Append | QFile::Text)) {
             QMessageBox::warning(this, "Warning", "Could not open file for writing.");
             return;
         }
@@ -103,6 +93,7 @@ void Admin::on_pushButton_confirm_clicked(){
         User::loadUsers();
         clearLineEdits();
     }
+
 
     else if (delete_user) {
         QFile file(path);

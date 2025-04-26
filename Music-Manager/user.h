@@ -17,6 +17,7 @@ class User : public QDialog
 public:
     explicit User(QString username, QString password, QWidget *parent = nullptr);
     static bool validateCredentials(const QString &username, const QString &password);
+    static bool usernameExists(const QString& username);
 
     static void loadUsers();
     static void saveUsers();
