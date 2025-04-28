@@ -11,6 +11,7 @@ public:
     QString getAlbum() const;
     QString getDuration() const;
 
+    //overloaded == operator to check for duplicates
     bool operator == (const Song& other) const;
 
 private:
@@ -18,8 +19,6 @@ private:
     QString artist;
     QString album;
     QString duration;
-
-    //overloaded == operator to check for duplicates
 };
 
 #endif // SONG_H

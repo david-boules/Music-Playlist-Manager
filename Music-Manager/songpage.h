@@ -20,12 +20,14 @@ public:
 
     void loadSongs();
     void saveSongs();
-    void displaySongs();
 
 private slots:
-    void on_pushButton_clicked();
 
     void on_pushButton_back_clicked();
+
+    void on_pushButton_displaySongs_clicked();
+
+    void on_pushButton_addToSongLibrary_clicked();
 
 private:
     Ui::SongPage *ui;
