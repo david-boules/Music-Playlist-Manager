@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>563</width>
-    <height>346</height>
+    <width>669</width>
+    <height>348</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,16 +16,16 @@
   <widget class="QLabel" name="label_pageTitle">
    <property name="geometry">
     <rect>
-     <x>200</x>
-     <y>30</y>
-     <width>151</width>
-     <height>31</height>
+     <x>210</x>
+     <y>20</y>
+     <width>241</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <family>Adelle Sans Devanagari</family>
-     <pointsize>16</pointsize>
+     <family>Arial</family>
+     <pointsize>24</pointsize>
      <bold>true</bold>
     </font>
    </property>
@@ -58,10 +58,16 @@
      <height>261</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
    <property name="title">
     <string>Add New Song</string>
    </property>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>16</x>
@@ -125,7 +131,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>80</x>
@@ -175,9 +181,15 @@
     <rect>
      <x>270</x>
      <y>80</y>
-     <width>271</width>
+     <width>391</width>
      <height>261</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>14</pointsize>
+    </font>
    </property>
    <property name="title">
     <string>Song Library</string>
@@ -187,15 +199,15 @@
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>251</width>
-      <height>181</height>
+      <width>381</width>
+      <height>191</height>
      </rect>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_displaySongs">
     <property name="geometry">
      <rect>
-      <x>70</x>
+      <x>120</x>
       <y>210</y>
       <width>141</width>
       <height>41</height>
@@ -213,7 +225,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>0</x>

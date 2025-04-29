@@ -28,7 +28,6 @@ public:
     ~User();
 
 private slots:
-    void on_createPlaylist_clicked();
 
     void on_searchSongs_clicked();
 

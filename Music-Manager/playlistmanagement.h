@@ -20,18 +20,14 @@ public:
     ~PlaylistManagement();
 
 private slots:
-    void on_AddPlaylist_clicked();
-    void on_DeletePlaylist_clicked();
-    void on_AddSong_clicked();
-    void on_DeleteSong_clicked();
 
     void on_pushButton_back_clicked();
+    void on_createPlaylist_clicked();
 
 private:
     Ui::PlaylistManagement *ui;
 
     QVector<Playlist> playlists;
-    void loadPlaylistsToText();
     void refreshSongList(const Playlist &p);
     bool saveToFile(const QString &filename);
     bool loadFromFile(const QString &filename);

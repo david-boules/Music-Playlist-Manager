@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->LineEdit_username->setFocus();
 }
 
 MainWindow::~MainWindow()

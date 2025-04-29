@@ -1,6 +1,7 @@
 #include "playlistmanagement.h"
 #include "ui_playlistmanagement.h"
 #include "playlist.h"
+#include "playlistcreator.h"
 #include <QInputDialog>
 #include <QFile>
 #include <QTextStream>
@@ -11,79 +12,12 @@ PlaylistManagement::PlaylistManagement(QWidget *parent)
 {
     ui->setupUi(this);
     loadFromFile("playlists.txt");
-    loadPlaylistsToText();
+    //loadPlaylistsToText();
 }
 
 PlaylistManagement::~PlaylistManagement()
 {
     delete ui;
-}
-
-void PlaylistManagement::loadPlaylistsToText()
-{
-    QString display;
-    for (const Playlist& p : playlists)
-        display += p.getName() + " (" + QString::number(p.numSongs()) + " songs)\n";
-    ui->playlistDisplay->setText(display);
-}
-
-void PlaylistManagement::refreshSongList(const Playlist &p)
-{
-    QString display;
-    for (const Song& s : p.getSongs()) {
-        display += s.getTitle() + " by " + s.getArtist() + " (" + s.getDuration() + ")\n";
-    }
-    ui->songDisplay->setText(display);
-}
-
-void PlaylistManagement::on_AddPlaylist_clicked()
-{
-    QString name = QInputDialog::getText(this, "Add Playlist", "Enter name:");
-    if (name.isEmpty()) return;
-    playlists.append(Playlist(name));
-    saveToFile("playlists.txt");
-    loadPlaylistsToText();
-}
-
-void PlaylistManagement::on_DeletePlaylist_clicked()
-{
-    QString name = QInputDialog::getText(this, "Delete Playlist", "Enter playlist name to delete:");
-    for (int i = 0; i < playlists.size(); ++i) {
-        if (playlists[i].getName() == name) {
-            playlists.removeAt(i);
-            break;
-        }
-    }
-    saveToFile("playlists.txt");
-    loadPlaylistsToText();
-}
-
-void PlaylistManagement::on_AddSong_clicked()
-{
-    QString name = QInputDialog::getText(this, "Playlist", "Enter playlist name:");
-    Playlist* p = getPlaylist(name);
-    if (!p) return;
-
-    QString title = QInputDialog::getText(this, "Title", "Title:");
-    QString artist = QInputDialog::getText(this, "Artist", "Artist:");
-    QString album = QInputDialog::getText(this, "Album", "Album:");
-    QString duration = QInputDialog::getText(this, "Duration", "Duration:");
-
-    p->addSong(Song(title, artist, album, duration));
-    saveToFile("playlists.txt");
-    refreshSongList(*p);
-}
-
-void PlaylistManagement::on_DeleteSong_clicked()
-{
-    QString name = QInputDialog::getText(this, "Playlist", "Enter playlist name:");
-    Playlist* p = getPlaylist(name);
-    if (!p) return;
-
-    QString title = QInputDialog::getText(this, "Delete Song", "Title to delete:");
-    p->deleteSong(title);
-    saveToFile("playlists.txt");
-    refreshSongList(*p);
 }
 
 Playlist* PlaylistManagement::getPlaylist(const QString &name)
@@ -135,5 +69,13 @@ void PlaylistManagement::on_pushButton_back_clicked()
     if (parentWidget()) { //returns a pointer to the widget that opened the current window (checking to make sure a parent exists)
         parentWidget()->show(); //therefore can be used to go back
     }
+}
+
+
+void PlaylistManagement::on_createPlaylist_clicked()
+{
+    hide();
+    PlaylistCreator *pc = new PlaylistCreator(this);
+    pc->show();
 }
 

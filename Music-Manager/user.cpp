@@ -16,7 +16,7 @@ User::User(QString username, QString password, QWidget *parent)
     , ui(new Ui::User)
 {
     ui->setupUi(this);
-    ui->label_welcome->setText("Welcome, " + username + "! Last Played Song: " + getLastPlayedSong());
+    ui->label_welcome->setText("Welcome, " + username + "!");
 }
 User::~User()
 {
@@ -102,12 +102,6 @@ bool User::validateCredentials(const QString &username, const QString &password)
     } else {
         return false;
     }
-}
-
-void User::on_createPlaylist_clicked() {
-    hide();
-    PlaylistCreator *pc = new PlaylistCreator(this);
-    pc->show();
 }
 
 void User::on_userReports_clicked()
