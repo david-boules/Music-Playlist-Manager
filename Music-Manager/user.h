@@ -23,7 +23,7 @@ public:
     static void saveUsers();
 
     QString getLastPlayedSong();
-    QString getAllPlaylists();
+    int getAllPlaylists();
 
     ~User();
 

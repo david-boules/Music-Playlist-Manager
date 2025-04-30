@@ -3,9 +3,15 @@
 #include "reports.h"
 #include "user.h"
 #include "ui_user.h"
+#include <QInputDialog>
 #include <QFile>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QDir> //To search, filter, and list files in directory.
+#include <QTextStream>
+#include <QCoreApplication> //To access the path where the application is running (e.g., the folder containing the .exe or .app file).
+
+
 
 using namespace std;
 
@@ -112,7 +118,52 @@ void User::on_userReports_clicked()
 }
 
 void User::on_searchSongs_clicked() {
-    QMessageBox::about(this, "Search", "Search Songs");
+    // Ask the user to input the song title to search for
+    QString songToFind = QInputDialog::getText(this, "Search Songs", "Enter Song Title:");
+    if (songToFind.trimmed().isEmpty()) {
+        QMessageBox::warning(this, "Input Error", "Song title is empty.");
+        return;
+    }
+
+    // Determine the directory path where playlists are stored
+    QString appPath = QCoreApplication::applicationDirPath();
+    QDir dir(appPath);
+
+    // Find all playlist files that belong to this user; the pattern matches UserName_*.txt "ALex_*.txt" with "Alex_Workout.txt"
+
+    QStringList playlistFiles = dir.entryList(QStringList() << UserName + "_*.txt", QDir::Files);
+
+    QStringList foundInPlaylists;
+
+    bool found = false;
+
+    // Search through each playlist file
+    for (QString &fileName : playlistFiles) {
+        QFile file(appPath + "/" + fileName);
+        QTextStream in(&file);
+        // Keep reading till the textstream end
+        while (!in.atEnd()) {
+          QString line = in.readLine().trimmed();
+            if (line.contains(songToFind, Qt::CaseInsensitive)) // Check if the line contains the song title; ignore case.
+            {
+                found = true;
+                foundInPlaylists.append(fileName);
+                break;
+            }
+        }
+        file.close();
+    }
+
+    // Display results to the user
+    if (!found)
+    {
+        QMessageBox::information(this, "Not Found", "The song was not found in any of your playlists.");
+    }
+    else
+    {
+        QString message = "The song was found in:\n" + foundInPlaylists.join("\n");
+        QMessageBox::information(this, "Song Found", message);
+    }
 }
 
 void User::on_viewPlaylists_clicked() {
@@ -122,15 +173,31 @@ void User::on_viewPlaylists_clicked() {
 }
 
 QString User::getLastPlayedSong() {
-    //not working yet
-        return "N/A";
+    //Create the filename where last played songs are stored for this user
+    QFile file(UserName + ".txt");
+
+    QTextStream in(&file); //Textstream to read the file
+    QString last;
+
+    // Read the file line by line; each line is assumed to be a song title
+    while (!in.atEnd()) {
+        last = in.readLine().trimmed(); // Keep updating 'last' with the newest line
     }
 
-// type must be changed
-QString User::getAllPlaylists() {
-    //not working yet
-    return "N/A";
+    // If the file is empty, return "N/A"
+    return last.isEmpty() ? "N/A" : last;
+    }
+
+// type changed to int?? Or do we use QString??
+int User::getAllPlaylists() {
+    QDir dir(QCoreApplication::applicationDirPath()); //Get the path to the directory where the app is running
+
+    //Find all files that match the pattern "UserName_*.txt"; assume playlists are stored as individual text files for each user
+    QStringList files = dir.entryList(QStringList() << UserName + "_*.txt", QDir::Files);
+
+    return files.count(); ;
 }
+
 
 void User::on_pushButton_back_clicked()
 {
