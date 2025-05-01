@@ -57,8 +57,8 @@ The Music Playlist Manager simulates a real-world scenario where users can creat
 
 ## User Roles
 
-- **Admin:** Full access to user and playlist management (username: admin, password: admin123).
-- **User:** Manage own playlists and generate personal reports(create a user from the admin page).
+- **Admin:** Full access to user and playlist management
+- **User:** Manage own playlists and generate personal reports (create a user from the admin page).
 
 ---
 
