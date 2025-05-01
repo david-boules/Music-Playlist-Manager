@@ -64,12 +64,12 @@
     <string>Songs in (Selected Playlist)</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_2">
+  <widget class="QLabel" name="label_PMTitle">
    <property name="geometry">
     <rect>
-     <x>170</x>
+     <x>120</x>
      <y>30</y>
-     <width>321</width>
+     <width>481</width>
      <height>31</height>
     </rect>
    </property>
@@ -87,7 +87,7 @@
     <set>Qt::AlignmentFlag::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -175,7 +175,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>40</x>

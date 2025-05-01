@@ -7,10 +7,11 @@
 #include <QTextStream>
 #include <QMessageBox>
 
-PlaylistManagement::PlaylistManagement(QWidget *parent)
+PlaylistManagement::PlaylistManagement(QString username, QWidget *parent)
     : QDialog(parent), ui(new Ui::PlaylistManagement)
 {
     ui->setupUi(this);
+    ui->label_PMTitle->setText(username + "'s Playlist Management Page");
     loadFromFile("playlists.txt");
     //loadPlaylistsToText();
 }

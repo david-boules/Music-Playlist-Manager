@@ -249,7 +249,7 @@ void User::on_searchSongs_clicked() {
 
 void User::on_viewPlaylists_clicked() {
     hide();
-    PlaylistManagement *pm = new PlaylistManagement(this);
+    PlaylistManagement *pm = new PlaylistManagement(UserName, this);
     pm->show();
 }
 
