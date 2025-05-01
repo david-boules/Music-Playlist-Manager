@@ -12,13 +12,12 @@ The Music Playlist Manager simulates a real-world scenario where users can creat
 
 ### 1. Login
 - Login with username and password.
-- Default admin account is created at the beginning.
 - **Only the admin** can create and manage user accounts.
 
 ### 2. Admin Page
-- **Admin Login** - Only the default admin account can access this page
+- **Admin Login** - Only admin accounts can access this page
 - **Add/Delete users** - Create new users (username, password, email) and delete users.
-- **Password validation** - Ensure passwords consists of 8 characters including numbers.
+- **Password validation** - Ensure passwords consists of 8 characters
 - **User Storage** - Store user data in files
 - **View list of users** - Show a list of current users with an option to *delete accounts*, if needed.
 
