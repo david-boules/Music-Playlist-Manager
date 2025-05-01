@@ -1,4 +1,4 @@
-test testtest test@test
-user1 user1234 usueresadf
-user2 user2222 user2@gmail.com
-David david123 david@gmail.com
+admin admin123 admin@admin.com admin
+admin_2 admin2222 admin2@gmail.com admin
+david david123 david@gmail.com user
+test_user test1234 test@gmail.com user

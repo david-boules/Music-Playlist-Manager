@@ -94,66 +94,6 @@
    <property name="title">
     <string>Manage Users</string>
    </property>
-   <widget class="QLabel" name="label_username">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>72</y>
-      <width>91</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Arial</family>
-      <pointsize>18</pointsize>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>Username:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_password">
-    <property name="geometry">
-     <rect>
-      <x>22</x>
-      <y>105</y>
-      <width>91</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Arial</family>
-      <pointsize>18</pointsize>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>Password:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_email">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>138</y>
-      <width>51</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Arial</family>
-      <pointsize>18</pointsize>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>Email:</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButton_confirm">
     <property name="geometry">
      <rect>
@@ -177,15 +117,15 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>210</y>
-      <width>231</width>
+      <x>10</x>
+      <y>240</y>
+      <width>281</width>
       <height>25</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <property name="spacing">
-      <number>10</number>
+      <number>30</number>
      </property>
      <item>
       <widget class="QRadioButton" name="radioButton_addUser">
@@ -217,16 +157,96 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>120</x>
+      <x>0</x>
       <y>72</y>
-      <width>144</width>
-      <height>85</height>
+      <width>111</width>
+      <height>121</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="label_username">
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>18</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Username:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_password">
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>18</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Password:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_email">
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>18</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Email:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_email_2">
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>18</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Role:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>73</y>
+      <width>181</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
       <widget class="QLineEdit" name="lineEdit_username">
        <property name="font">
@@ -259,6 +279,24 @@
         </font>
        </property>
       </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QRadioButton" name="radioButton_user">
+         <property name="text">
+          <string>User</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radioButton_admin">
+         <property name="text">
+          <string>Admin</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </widget>
@@ -306,7 +344,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>0</x>

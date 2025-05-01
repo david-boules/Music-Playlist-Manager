@@ -11,6 +11,9 @@ int main(int argc, char *argv[])
 
     MainWindow w;
     w.show();
-    return a.exec();
+    int terminate = a.exec();
 
+    User::saveUsers(); // Contents of 'UsersList' saved to 'users.txt' when exiting the application
+
+    return terminate;
 }

@@ -3,3 +3,4 @@ Bad,Michael Jackson,Bad 25th Anniversary,4:08
 Nour El Ein,Amr Diab,Nour El Ein,5:08
 Qadeyet Am Ahmed,Omar Khairat,Am Ahmed,5:36
 Gangsta's Paradise,Coolio,Gangsta's Paradise,4:01
+song2,artist2,album2,4:00

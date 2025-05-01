@@ -1,4 +1,3 @@
-#include "playlistcreator.h"
 #include "playlistmanagement.h"
 #include "reports.h"
 #include "user.h"
@@ -15,25 +14,38 @@
 
 using namespace std;
 
-QMap<QString, QString> User:: usernames_and_passwords;
+QMap<QString, UserInfo> User::UsersList;
 
-User::User(QString username, QString password, QWidget *parent)
-    : QDialog(parent)
-    , ui(new Ui::User)
+User::User(QString username, QString password, QWidget *parent) : QDialog(parent) , ui(new Ui::User)
 {
     ui->setupUi(this);
     ui->label_welcome->setText("Welcome, " + username + "!");
+
+    // temporary: so unfinished functions do not cause errors
+    UserName = username;
+    Password = password;
 }
 User::~User()
 {
     delete ui;
 }
 
+/* Functions concerning User Storage
+ * usernameExists
+ * loadUsers
+ * saveUsers
+ * validateCredentials
+ * addUser
+ * deleteUser
+ * getUserRole
+ */
+
+// Check for existing username
 bool User::usernameExists(const QString& username) {
-    return usernames_and_passwords.contains(username);
+    return UsersList.contains(username);
 }
 
-// Loading user info to the 'usernames_and_passwords' map at startup
+// Loading user info from 'users.txt' to the 'UsersList' map at startup
 void User::loadUsers() {
     QString filePath = QCoreApplication::applicationDirPath() + "/users.txt";
     QFile file(filePath);
@@ -46,8 +58,6 @@ void User::loadUsers() {
 #endif
     }
 
-    qDebug() << "Trying to open:" << file.fileName();
-
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug() << "Cannot open users.txt for reading.";
         return;
@@ -58,25 +68,22 @@ void User::loadUsers() {
         QString line = in.readLine().trimmed();
         if (line.isEmpty()) continue;
 
-        QStringList parts = line.split(' ');
-        if (parts.size() < 2) {
+        QStringList fields = line.split(' ');
+        if (fields.size() < 4) {
             qDebug() << "Invalid line format:" << line;
             continue;
         }
 
-        QString username = parts[0];
-        QString password = parts[1];
-
-        usernames_and_passwords[username] = password;
+        UserInfo info;
+        info.password = fields[1];
+        info.email = fields[2];
+        info.role = fields[3];
+        UsersList[fields[0]] = info;
     }
-
     file.close();
-    qDebug() << "Loaded users:";
-    for (auto it = usernames_and_passwords.begin(); it != usernames_and_passwords.end(); ++it) {
-        qDebug() << "Username:" << it.key() << "Password:" << it.value();
-    }
 }
 
+// Writing user info to 'users.txt' when exiting the application
 void User::saveUsers() {
     QString filePath = QCoreApplication::applicationDirPath() + "/users.txt";
     QFile file(filePath);
@@ -88,28 +95,102 @@ void User::saveUsers() {
 #endif
     }
 
-    if (!file.open(QIODevice::WriteOnly | QFile::Text)) {
+    if (!file.open(QIODevice::WriteOnly | QFile::Text | QIODevice::Truncate)) { // 'Truncate' to ensure file is completely cleared and rewritten
         qDebug() << "Cannot open users.txt for writing.";
         return;
     }
 
     QTextStream out(&file);
-    for (auto it = usernames_and_passwords.begin(); it != usernames_and_passwords.end(); ++it) {
-        out << it.key() << " " << it.value() << "\n";
+    for (auto it = UsersList.begin(); it != UsersList.end(); it++) {
+        out << it.key() << " " << it.value().password << " " << it.value().email << " " << it.value().role << "\n";
     }
 
     file.close();
 }
 
+// Checking whehter the right username and password have been entered
 bool User::validateCredentials(const QString &username, const QString &password) {
 
-    if(usernames_and_passwords.contains(username) && usernames_and_passwords[username] == password) {
+    if(UsersList.contains(username) && UsersList[username].password == password) {
         return true;
     } else {
         return false;
     }
 }
 
+// Function that doubles as a boolean to check if admin wants to add a user and adds the user accordingly
+bool User::addUser(const QString& username, const QString& password, const QString& email, const QString& role) {
+
+    if (UsersList.contains(username)) {
+        return false;
+    }
+
+    UserInfo info = {password, email, role};
+    UsersList[username] = info;
+    return true;
+}
+
+// Function that doubles as a boolean to check if admin wants to delete a user and deletes the user accordingly
+bool User::deleteUser(const QString& username, const QString& password) {
+
+    if (!UsersList.contains(username) || UsersList[username].password != password) {
+        return false;
+    }
+
+    UsersList.remove(username);
+    return true;
+}
+
+// Getter function to get a user's role to handle login
+QString User::getUserRole(const QString& username) {
+    return UsersList[username].role;
+}
+
+// Getter function to get the 'UsersList' data structure for operations
+QMap<QString, UserInfo> User::getAllUsers() {
+    return UsersList;
+}
+
+
+/* Functions for user dashboard functionality
+ * getLastPlayedSong
+ * getAllPlaylists
+ */
+
+QString User::getLastPlayedSong() {
+    //Create the filename where last played songs are stored for this user
+    QFile file(UserName + ".txt");
+
+    QTextStream in(&file); //Textstream to read the file
+    QString last;
+
+    // Read the file line by line; each line is assumed to be a song title
+    while (!in.atEnd()) {
+        last = in.readLine().trimmed(); // Keep updating 'last' with the newest line
+    }
+
+    // If the file is empty, return "N/A"
+    return last.isEmpty() ? "N/A" : last;
+}
+
+// type changed to int?? Or do we use QString??
+int User::getAllPlaylists() {
+    QDir dir(QCoreApplication::applicationDirPath()); //Get the path to the directory where the app is running
+
+    //Find all files that match the pattern "UserName_*.txt"; assume playlists are stored as individual text files for each user
+    QStringList files = dir.entryList(QStringList() << UserName + "_*.txt", QDir::Files);
+
+    return files.count(); ;
+}
+
+
+
+/* Functions for page navigation / pop-ups
+ * on_userReports_clicked
+ * on_searchSongs_clicked
+ * on_viewPlaylists_clicked
+ * on_pushButton_back_clicked
+ */
 void User::on_userReports_clicked()
 {
     hide();
@@ -171,33 +252,6 @@ void User::on_viewPlaylists_clicked() {
     PlaylistManagement *pm = new PlaylistManagement(this);
     pm->show();
 }
-
-QString User::getLastPlayedSong() {
-    //Create the filename where last played songs are stored for this user
-    QFile file(UserName + ".txt");
-
-    QTextStream in(&file); //Textstream to read the file
-    QString last;
-
-    // Read the file line by line; each line is assumed to be a song title
-    while (!in.atEnd()) {
-        last = in.readLine().trimmed(); // Keep updating 'last' with the newest line
-    }
-
-    // If the file is empty, return "N/A"
-    return last.isEmpty() ? "N/A" : last;
-    }
-
-// type changed to int?? Or do we use QString??
-int User::getAllPlaylists() {
-    QDir dir(QCoreApplication::applicationDirPath()); //Get the path to the directory where the app is running
-
-    //Find all files that match the pattern "UserName_*.txt"; assume playlists are stored as individual text files for each user
-    QStringList files = dir.entryList(QStringList() << UserName + "_*.txt", QDir::Files);
-
-    return files.count(); ;
-}
-
 
 void User::on_pushButton_back_clicked()
 {
