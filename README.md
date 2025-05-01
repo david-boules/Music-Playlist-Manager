@@ -103,13 +103,6 @@ To set up and run the project locally:
 
 ---
 
-## Sample Screenshots
-
-> *(Screenshots of the login page, dashboard, playlist manager, etc. will be pasted here once implemented.)*
-
----
-
-
 ## Authors
 - David Boules
 - Hazem Ajlan
