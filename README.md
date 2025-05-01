@@ -62,12 +62,6 @@ The Music Playlist Manager simulates a real-world scenario where users can creat
 
 ---
 
-## File Structure
-
-> *(To be filled out once project structure is finalized.)*
-
----
-
 ## Setup Instructions
 
 To set up and run the project locally:
