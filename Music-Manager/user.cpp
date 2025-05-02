@@ -9,7 +9,7 @@
 #include <QDir> //To search, filter, and list files in directory.
 #include <QTextStream>
 #include <QCoreApplication> //To access the path where the application is running (e.g., the folder containing the .exe or .app file).
-
+#include <QDebug>
 
 
 using namespace std;
@@ -96,7 +96,6 @@ void User::saveUsers() {
     }
 
     if (!file.open(QIODevice::WriteOnly | QFile::Text | QIODevice::Truncate)) { // 'Truncate' to ensure file is completely cleared and rewritten
-        qDebug() << "Cannot open users.txt for writing.";
         return;
     }
 
@@ -134,6 +133,7 @@ bool User::addUser(const QString& username, const QString& password, const QStri
 bool User::deleteUser(const QString& username, const QString& password) {
 
     if (!UsersList.contains(username) || UsersList[username].password != password) {
+        qDebug() << "Username not found in UsersList.";
         return false;
     }
 
