@@ -12,13 +12,12 @@ The Music Playlist Manager simulates a real-world scenario where users can creat
 
 ### 1. Login
 - Login with username and password.
-- Default admin account is created at the beginning.
 - **Only the admin** can create and manage user accounts.
 
 ### 2. Admin Page
-- **Admin Login** - Only the default admin account can access this page
+- **Admin Login** - Only admin accounts can access this page
 - **Add/Delete users** - Create new users (username, password, email) and delete users.
-- **Password validation** - Ensure passwords consists of 8 characters including numbers.
+- **Password validation** - Ensure passwords consists of 8 characters
 - **User Storage** - Store user data in files
 - **View list of users** - Show a list of current users with an option to *delete accounts*, if needed.
 
@@ -57,14 +56,8 @@ The Music Playlist Manager simulates a real-world scenario where users can creat
 
 ## User Roles
 
-- **Admin:** Full access to user and playlist management (username: admin, password: admin123).
-- **User:** Manage own playlists and generate personal reports(create a user from the admin page).
-
----
-
-## File Structure
-
-> *(To be filled out once project structure is finalized.)*
+- **Admin:** Full access to user and playlist management
+- **User:** Manage own playlists and generate personal reports (create a user from the admin page).
 
 ---
 
@@ -108,13 +101,6 @@ To set up and run the project locally:
    - From the admin dashboard, you can create additional user accounts.
 
 ---
-
-## Sample Screenshots
-
-> *(Screenshots of the login page, dashboard, playlist manager, etc. will be pasted here once implemented.)*
-
----
-
 
 ## Authors
 - David Boules

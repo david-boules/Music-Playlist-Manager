@@ -16,7 +16,7 @@ class PlaylistManagement : public QDialog
     Q_OBJECT
 
 public:
-    explicit PlaylistManagement(QWidget *parent = nullptr);
+    explicit PlaylistManagement(QString username, QWidget *parent = nullptr);
     ~PlaylistManagement();
 
 private slots:
