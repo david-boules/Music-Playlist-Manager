@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QPushButton" name="createPlaylistButton">
+  <widget class="QPushButton" name="createPlaylist">
    <property name="geometry">
     <rect>
      <x>50</x>
@@ -74,7 +74,7 @@
    <property name="title">
     <string>Select Songs to Add (at least 1):</string>
    </property>
-   <widget class="QTableWidget" name="tableWidget">
+   <widget class="QTableWidget" name="tableWidget_songs">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -83,9 +83,18 @@
       <height>171</height>
      </rect>
     </property>
+    <property name="editTriggers">
+     <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::SelectionMode::MultiSelection</enum>
+    </property>
+    <property name="selectionBehavior">
+     <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
+    </property>
    </widget>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -109,7 +118,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="lineEdit_name"/>
+     <widget class="QLineEdit" name="lineEdit_playlistName"/>
     </item>
    </layout>
   </widget>

@@ -14,6 +14,8 @@
 *.so.*
 *_pch.h.cpp
 *_resource.rc
+Music-Manager.pro.user
+Music-Manager.pro.qtds
 *.qm
 .#*
 *.*#

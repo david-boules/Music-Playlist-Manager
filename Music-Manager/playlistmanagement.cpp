@@ -3,16 +3,27 @@
 #include "playlist.h"
 #include "playlistcreator.h"
 #include <QInputDialog>
+#include <QDir>
+#include <QStringList>
 #include <QFile>
 #include <QTextStream>
 #include <QMessageBox>
 
 PlaylistManagement::PlaylistManagement(QString username, QWidget *parent)
-    : QDialog(parent), ui(new Ui::PlaylistManagement)
+    : QDialog(parent), ui(new Ui::PlaylistManagement), username(username)
 {
     ui->setupUi(this);
     ui->label_PMTitle->setText(username + "'s Playlist Management Page");
-    loadFromFile("playlists.txt");
+    connect(ui->listWidget_playlists, &QListWidget::itemClicked, this, &PlaylistManagement::on_listWidget_playlists_itemClicked);
+
+    playlists = AllPlaylists[username];
+    for(const Playlist& playlist : playlists) {
+        ui->listWidget_playlists->addItem(playlist.getName());
+    }
+
+    ui->tableWidget_songs->setColumnCount(4);
+    ui->tableWidget_songs->setHorizontalHeaderLabels({"Title", "Artist", "Album", "Duration"});
+
     //loadPlaylistsToText();
 }
 
@@ -20,6 +31,8 @@ PlaylistManagement::~PlaylistManagement()
 {
     delete ui;
 }
+
+QMap<QString, QVector<Playlist>> PlaylistManagement::AllPlaylists;
 
 Playlist* PlaylistManagement::getPlaylist(const QString &name)
 {
@@ -29,39 +42,49 @@ Playlist* PlaylistManagement::getPlaylist(const QString &name)
     return nullptr;
 }
 
-bool PlaylistManagement::saveToFile(const QString &filename)
-{
-    QFile file(filename);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) return false;
-
-    QTextStream out(&file);
-    for (const Playlist& pl : playlists) {
-        out << "#" << pl.getName() << "\n";
-        for (const Song& s : pl.getSongs())
-            out << s.getTitle() << "," << s.getArtist() << "," << s.getAlbum() << "," << s.getDuration() << "\n";
-    }
-    return true;
+void PlaylistManagement::addUserPlaylist(const QString& username, const Playlist& p) {
+    AllPlaylists[username].append(p);
 }
 
-bool PlaylistManagement::loadFromFile(const QString &filename)
-{
-    QFile file(filename);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return false;
+void PlaylistManagement::loadPlaylists() {
+    QString basePath = QCoreApplication::applicationDirPath() + "/../../data/playlists";
+    QDir dir(basePath);
 
-    QTextStream in(&file);
-    Playlist *current = nullptr;
-    while (!in.atEnd()) {
-        QString line = in.readLine().trimmed();
-        if (line.startsWith("#")) {
-            playlists.append(Playlist(line.mid(1)));
-            current = &playlists.last();
-        } else if (current) {
-            QStringList parts = line.split(",");
-            if (parts.size() == 4)
-                current->addSong(Song(parts[0], parts[1], parts[2], parts[3]));
-        }
+#ifdef Q_OS_MAC
+    if(!dir.exists()) {
+        basePath = QCoreApplication::applicationDirPath() + "/../../../../../data/playlists";
+        dir = QDir(basePath);
     }
-    return true;
+#endif
+
+    QStringList playlistFiles = dir.entryList(QStringList() << "*.txt", QDir::Files);
+
+    for (const QString& fileName : playlistFiles) {
+        QString username = fileName.section(".", 0, 0); // Extracting the username from the .txt file
+        QFile file(dir.absoluteFilePath(fileName));
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) continue;
+
+        QTextStream in(&file);
+        Playlist* current = nullptr;
+        while (!in.atEnd()) {
+            QString line = in.readLine().trimmed();
+            if (line.startsWith("#")) {                 // Playlist names will start with # in the .txt files
+                current = new Playlist(line.mid(1));    // Removing the # when loading into system
+                AllPlaylists[username].append(*current);
+            } else if (current) {
+                QStringList parts = line.split(",");
+                if (parts.size() == 4)
+                    current->addSong(Song(parts[0], parts[1], parts[2], parts[3]));
+            }
+        }
+        file.close();
+    }
+}
+
+
+
+const QVector<Playlist>& PlaylistManagement::getUserPlaylist(const QString& username){
+    return AllPlaylists[username];
 }
 
 void PlaylistManagement::on_pushButton_back_clicked()
@@ -76,7 +99,30 @@ void PlaylistManagement::on_pushButton_back_clicked()
 void PlaylistManagement::on_createPlaylist_clicked()
 {
     hide();
-    PlaylistCreator *pc = new PlaylistCreator(this);
+    PlaylistCreator *pc = new PlaylistCreator(username, this);
     pc->show();
+}
+
+
+void PlaylistManagement::on_listWidget_playlists_itemClicked(QListWidgetItem *item)
+{
+    QString name = item->text();
+    Playlist* p = getPlaylist(name);
+
+    if(!p) return;
+
+    ui->tableWidget_songs->clear();
+    ui->tableWidget_songs->setColumnCount(4);
+    ui->tableWidget_songs->setRowCount(p->getSongs().size());
+    ui->tableWidget_songs->setHorizontalHeaderLabels({"Title", "Artist", "Album", "Duration"});
+
+    for(int i = 0; i < p->getSongs().size(); i++) {
+        const Song& song = p->getSongs()[i];
+        ui->tableWidget_songs->setItem(i, 0, new QTableWidgetItem(song.getTitle()));
+        ui->tableWidget_songs->setItem(i, 1, new QTableWidgetItem(song.getArtist()));
+        ui->tableWidget_songs->setItem(i, 2, new QTableWidgetItem(song.getAlbum()));
+        ui->tableWidget_songs->setItem(i, 3, new QTableWidgetItem(song.getDuration()));
+
+    }
 }
 

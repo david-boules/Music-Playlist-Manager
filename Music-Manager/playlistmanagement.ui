@@ -26,7 +26,7 @@
     <string>Back</string>
    </property>
   </widget>
-  <widget class="QGroupBox" name="groupBox">
+  <widget class="QGroupBox" name="groupBox_playlists">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -44,8 +44,18 @@
    <property name="title">
     <string>Your Playlists</string>
    </property>
+   <widget class="QListWidget" name="listWidget_playlists">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>20</y>
+      <width>301</width>
+      <height>171</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
-  <widget class="QGroupBox" name="groupBox_2">
+  <widget class="QGroupBox" name="groupBox_songs">
    <property name="geometry">
     <rect>
      <x>350</x>
@@ -61,8 +71,18 @@
     </font>
    </property>
    <property name="title">
-    <string>Songs in (Selected Playlist)</string>
+    <string>Songs</string>
    </property>
+   <widget class="QTableWidget" name="tableWidget_songs">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>20</y>
+      <width>301</width>
+      <height>171</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QLabel" name="label_PMTitle">
    <property name="geometry">

@@ -8,7 +8,6 @@ SongPage::SongPage(QWidget *parent)
     : QDialog(parent), ui(new Ui::SongPage)
 {
     ui->setupUi(this);
-    loadSongs();
 }
 
 SongPage::~SongPage()
@@ -16,15 +15,21 @@ SongPage::~SongPage()
     delete ui;
 }
 
+QVector<Song> SongPage::songLibrary;
+
+const QVector<Song>& SongPage::getSongLibrary() {
+    return songLibrary;
+}
+
 void SongPage::loadSongs()
 {
-    QString filePath = QCoreApplication::applicationDirPath() + "/songs.txt";
+    QString filePath = QCoreApplication::applicationDirPath() + "/data/songs.txt";
     QFile file(filePath);
 
     // Handling case for MacOS (file structure for reading .txt required is different)
     if (!file.exists()) {
 #ifdef Q_OS_MAC
-        filePath = QCoreApplication::applicationDirPath() + "/../../../../../songs.txt";
+        filePath = QCoreApplication::applicationDirPath() + "/../../../../../data/songs.txt";
         file.setFileName(filePath);
 #endif
     }
@@ -57,20 +62,14 @@ void SongPage::loadSongs()
 
     file.close();
 
-    qDebug() << "Loaded songs:";
-    for (const Song& s : songLibrary) {
-        qDebug() << "Title:" << s.getTitle() << "Artist:" << s.getArtist()
-        << "Album:" << s.getAlbum() << "Duration:" << s.getDuration();
-    }
-
 }
 
 void SongPage::saveSongs()
 {
-    QString filePath = QCoreApplication::applicationDirPath() + "/songs.txt";
+    QString filePath = QCoreApplication::applicationDirPath() + "/data/songs.txt";
     if (!QFile::exists(filePath)) {
 #ifdef Q_OS_MAC
-        filePath = QCoreApplication::applicationDirPath() + "/../../../../../songs.txt";
+        filePath = QCoreApplication::applicationDirPath() + "/../../../../../data/songs.txt";
 #endif
     }
 
