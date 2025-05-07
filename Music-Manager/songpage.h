@@ -18,7 +18,9 @@ public:
     explicit SongPage(QWidget *parent = nullptr);
     ~SongPage();
 
-    void loadSongs();
+    static const QVector<Song>& getSongLibrary();
+
+    static void loadSongs(); // No need for a SongPage object to call this function (since it must be called at system startup)
     void saveSongs();
 
 private slots:
@@ -31,7 +33,7 @@ private slots:
 
 private:
     Ui::SongPage *ui;
-    QVector<Song> songLibrary;
+    static QVector<Song> songLibrary;
 };
 
 #endif // SONGPAGE_H

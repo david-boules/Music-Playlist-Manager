@@ -47,13 +47,13 @@ bool User::usernameExists(const QString& username) {
 
 // Loading user info from 'users.txt' to the 'UsersList' map at startup
 void User::loadUsers() {
-    QString filePath = QCoreApplication::applicationDirPath() + "/users.txt";
+    QString filePath = QCoreApplication::applicationDirPath() + "/data/users.txt";
     QFile file(filePath);
 
     // Handling case for MacOS (file structure for reading .txt required is different)
     if (!file.exists()) {
 #ifdef Q_OS_MAC
-        filePath = QCoreApplication::applicationDirPath() + "/../../../../../users.txt"; //MacOS requires .txt files to be in the same directory as the executable (5 directories deeper than main project folder)
+        filePath = QCoreApplication::applicationDirPath() + "/../../../../../data/users.txt"; //MacOS requires .txt files to be in the same directory as the executable (5 directories deeper than main project folder)
         file.setFileName(filePath);
 #endif
     }
@@ -85,12 +85,12 @@ void User::loadUsers() {
 
 // Writing user info to 'users.txt' when exiting the application
 void User::saveUsers() {
-    QString filePath = QCoreApplication::applicationDirPath() + "/users.txt";
+    QString filePath = QCoreApplication::applicationDirPath() + "/data/users.txt";
     QFile file(filePath);
 
     if (!file.exists()) {
 #ifdef Q_OS_MAC
-        filePath = QCoreApplication::applicationDirPath() + "/../../../../../users.txt";
+        filePath = QCoreApplication::applicationDirPath() + "/../../../../../data/users.txt";
         file.setFileName(filePath);
 #endif
     }
