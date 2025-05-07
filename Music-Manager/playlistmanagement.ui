@@ -67,9 +67,9 @@
   <widget class="QLabel" name="label_PMTitle">
    <property name="geometry">
     <rect>
-     <x>120</x>
+     <x>100</x>
      <y>30</y>
-     <width>481</width>
+     <width>561</width>
      <height>31</height>
     </rect>
    </property>
@@ -93,7 +93,7 @@
      <x>10</x>
      <y>90</y>
      <width>651</width>
-     <height>40</height>
+     <height>42</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">

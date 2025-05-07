@@ -18,7 +18,7 @@
     <rect>
      <x>240</x>
      <y>40</y>
-     <width>231</width>
+     <width>271</width>
      <height>61</height>
     </rect>
    </property>
@@ -119,8 +119,8 @@
      <rect>
       <x>10</x>
       <y>240</y>
-      <width>281</width>
-      <height>25</height>
+      <width>291</width>
+      <height>29</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -151,18 +151,18 @@
         </font>
        </property>
        <property name="text">
-        <string>Delete User</string>
+        <string>Delete User      </string>
        </property>
       </widget>
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>72</y>
-      <width>111</width>
+      <width>121</width>
       <height>121</height>
      </rect>
     </property>
@@ -211,7 +211,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Email:</string>
+        <string>Email:   </string>
        </property>
        <property name="alignment">
         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
@@ -228,7 +228,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Role:</string>
+        <string>Role:   </string>
        </property>
        <property name="alignment">
         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
@@ -237,7 +237,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>120</x>

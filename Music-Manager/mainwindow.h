@@ -26,6 +26,8 @@ private slots:
     void on_PushButton_login_clicked();
 
 
+    void on_switch2_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

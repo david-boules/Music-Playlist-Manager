@@ -18,6 +18,8 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+
 void MainWindow::on_PushButton_login_clicked()
 {
     QString username = ui->LineEdit_username->text();
@@ -48,3 +50,26 @@ void MainWindow::on_PushButton_login_clicked()
         u->show();
     }
 }
+
+bool isDarkMode = false;
+
+void MainWindow::on_switch2_clicked()
+{
+
+
+
+        if (!isDarkMode) {
+            qApp->setStyleSheet(
+                "QWidget { background-color: #121212; color: white; }"
+                "QPushButton { background-color: #1e1e1e; color: white;}"
+                "QListWidget {background-color: #808080; color: white; }"
+                "QLineEdit, QTextEdit { background-color: #2e2e2e; color: white;  }"
+                );
+            isDarkMode = true;
+        } else {
+            qApp->setStyleSheet(""); // Reset to default (light)
+            isDarkMode = false;
+        }
+    }
+
+
