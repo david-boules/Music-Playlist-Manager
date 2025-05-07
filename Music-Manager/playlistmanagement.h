@@ -18,15 +18,15 @@ class PlaylistManagement : public QDialog
 
 public:
     explicit PlaylistManagement(QString username, QWidget *parent = nullptr);
-
+    static void loadPlaylists();
     static const QVector<Playlist>& getUserPlaylist(const QString& username);
     static void addUserPlaylist(const QString& username, const Playlist& p);
+    static void saveAllPlaylists();
 
     ~PlaylistManagement();
 
 private slots:
 
-    void loadPlaylists();
     void on_pushButton_back_clicked();
     void on_createPlaylist_clicked();
     void on_listWidget_playlists_itemClicked(QListWidgetItem *item);

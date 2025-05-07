@@ -138,7 +138,6 @@ void SongPage::on_pushButton_addToSongLibrary_clicked()
     }
 
     songLibrary.append(Song(title, artist, album, duration));
-    saveSongs();
     QMessageBox::information(this, "Success", "Song added successfully!");
 
     ui->lineEdit_title->clear();

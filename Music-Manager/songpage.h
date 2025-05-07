@@ -21,7 +21,7 @@ public:
     static const QVector<Song>& getSongLibrary();
 
     static void loadSongs(); // No need for a SongPage object to call this function (since it must be called at system startup)
-    void saveSongs();
+    static void saveSongs(); // Same here (called when exiting the application)
 
 private slots:
 

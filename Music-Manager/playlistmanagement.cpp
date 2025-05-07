@@ -60,28 +60,65 @@ void PlaylistManagement::loadPlaylists() {
     QStringList playlistFiles = dir.entryList(QStringList() << "*.txt", QDir::Files);
 
     for (const QString& fileName : playlistFiles) {
-        QString username = fileName.section(".", 0, 0); // Extracting the username from the .txt file
+        QString username = fileName.section(".", 0, 0); // Extracting the username from the .txt filename
         QFile file(dir.absoluteFilePath(fileName));
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) continue;
 
         QTextStream in(&file);
         Playlist* current = nullptr;
+
         while (!in.atEnd()) {
             QString line = in.readLine().trimmed();
+
             if (line.startsWith("#")) {                 // Playlist names will start with # in the .txt files
+
+                if(current) {
+                    AllPlaylists[username].append(*current);
+                    delete current;
+                }
                 current = new Playlist(line.mid(1));    // Removing the # when loading into system
-                AllPlaylists[username].append(*current);
+
             } else if (current) {
                 QStringList parts = line.split(",");
                 if (parts.size() == 4)
                     current->addSong(Song(parts[0], parts[1], parts[2], parts[3]));
             }
         }
+
+        if(current) {
+            AllPlaylists[username].append(*current);
+            delete current;
+        }
+
         file.close();
     }
 }
 
+void PlaylistManagement::saveAllPlaylists() {
+    for(auto it = AllPlaylists.begin(); it != AllPlaylists.end(); it++) {
+        QString username = it.key();
+        QString filePath = QCoreApplication::applicationDirPath() + "/../../data/playlists/" + username + "Playlists.txt";
 
+#ifdef Q_OS_MAC
+        if (!QFile::exists(filePath)) {
+            filePath = QCoreApplication::applicationDirPath() + "/../../../../../data/playlists/" + username + ".txt";
+        }
+#endif
+        QFile file(filePath);
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+            continue;
+
+        QTextStream output(&file);
+        for(const Playlist&playlist : it.value()) {
+            output << "#" << playlist.getName() << "\n";
+            for(const Song&song : playlist.getSongs()) {
+                output << song.getTitle() << "," << song.getArtist() << "," << song.getAlbum() << "," << song.getDuration() << "\n";
+            }
+        }
+
+        file.close();
+    }
+}
 
 const QVector<Playlist>& PlaylistManagement::getUserPlaylist(const QString& username){
     return AllPlaylists[username];
@@ -101,6 +138,12 @@ void PlaylistManagement::on_createPlaylist_clicked()
     hide();
     PlaylistCreator *pc = new PlaylistCreator(username, this);
     pc->show();
+
+    playlists = AllPlaylists[username];
+    ui->listWidget_playlists->clear();
+
+    for(const Playlist& playlist : playlists)
+        ui->listWidget_playlists->addItem(playlist.getName());
 }
 
 
