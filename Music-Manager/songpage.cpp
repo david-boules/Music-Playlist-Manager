@@ -3,6 +3,10 @@
 #include <QFile>
 #include <QTextStream>
 #include <QMessageBox>
+#include <QFileDialog>
+#include <QPixmap>
+
+QString uploadedImagePath;
 
 SongPage::SongPage(QWidget *parent)
     : QDialog(parent), ui(new Ui::SongPage)
@@ -56,6 +60,7 @@ void SongPage::loadSongs()
         QString artist = fields[1];
         QString album = fields[2];
         QString duration = fields[3];
+        QString artPath = (fields.size() >=5) ? fields[4] : "";
 
         songLibrary.append(Song(title, artist, album, duration));
     }
@@ -78,7 +83,7 @@ void SongPage::saveSongs()
 
     QTextStream out(&file);
     for (const Song& s : songLibrary)
-        out << s.getTitle() << "," << s.getArtist() << "," << s.getAlbum() << "," << s.getDuration() << "\n";
+        out << s.getTitle() << "," << s.getArtist() << "," << s.getAlbum() << "," << s.getDuration() << "," << s.getAlbumArtPath() << "\n";
     file.close();
 }
 
@@ -137,7 +142,7 @@ void SongPage::on_pushButton_addToSongLibrary_clicked()
         }
     }
 
-    songLibrary.append(Song(title, artist, album, duration));
+    songLibrary.append(Song(title, artist, album, duration, uploadedImagePath));
     QMessageBox::information(this, "Success", "Song added successfully!");
 
     ui->lineEdit_title->clear();
@@ -145,3 +150,14 @@ void SongPage::on_pushButton_addToSongLibrary_clicked()
     ui->lineEdit_album->clear();
     ui->lineEdit_duration->clear();
 }
+
+void SongPage::on_pushButton_uploadArtwork_clicked()
+{
+    QString filePath = QFileDialog::getOpenFileName(this, "Select Album Artwork", "", "Images (*.png, *.jpg *.jpeg");
+    if(!filePath.isEmpty()) {
+        uploadedImagePath = filePath;
+        QPixmap pix(filePath);
+        ui->label_albumArtPreview->setPixmap(pix.scaled(100,100, Qt::KeepAspectRatio));
+    }
+}
+

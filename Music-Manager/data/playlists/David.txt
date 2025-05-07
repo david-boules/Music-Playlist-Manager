@@ -9,3 +9,5 @@ Daddy Cool,Boney M.,Take The Heat Off Me,3:29
 Careless Whisper,George Michael,Ladies & Gentlemen,5:00
 Sway,Michael Bublé,Michael Bublé,3:08
 Billie Jean,Michael Jackson,Thriller,4:54
+#Test
+Sunrise,Slaptop,Sunrise,3:34

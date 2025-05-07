@@ -31,6 +31,8 @@ private slots:
 
     void on_pushButton_addToSongLibrary_clicked();
 
+    void on_pushButton_uploadArtwork_clicked();
+
 private:
     Ui::SongPage *ui;
     static QVector<Song> songLibrary;
