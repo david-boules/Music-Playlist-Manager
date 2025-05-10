@@ -44,10 +44,22 @@ Playlist* PlaylistManagement::getPlaylist(const QString &name)
 
 void PlaylistManagement::addUserPlaylist(const QString& username, const Playlist& p) {
     AllPlaylists[username].append(p);
+
 }
 
+
+int PlaylistManagement::total_playlists() const {
+    int count = 0;
+    for (int i = 0; i < ui->listWidget_playlists->count(); ++i) {
+        QListWidgetItem* item = ui->listWidget_playlists->item(i);
+        if (item) count++;
+    }
+    return count;
+}
+
+
 void PlaylistManagement::loadPlaylists() {
-    QString basePath = QCoreApplication::applicationDirPath() + "/../../data/playlists";
+    QString basePath = QCoreApplication::applicationDirPath() + "/../../../data/playlists";
     QDir dir(basePath);
 
 #ifdef Q_OS_MAC
@@ -97,7 +109,7 @@ void PlaylistManagement::loadPlaylists() {
 void PlaylistManagement::saveAllPlaylists() {
     for(auto it = AllPlaylists.begin(); it != AllPlaylists.end(); it++) {
         QString username = it.key();
-        QString filePath = QCoreApplication::applicationDirPath() + "/../../data/playlists/" + username + "Playlists.txt";
+        QString filePath = QCoreApplication::applicationDirPath() + "/../../../data/playlists/" + username + "Playlists.txt";
 
 #ifdef Q_OS_MAC
         if (!QFile::exists(filePath)) {
@@ -122,6 +134,7 @@ void PlaylistManagement::saveAllPlaylists() {
 
 const QVector<Playlist>& PlaylistManagement::getUserPlaylist(const QString& username){
     return AllPlaylists[username];
+
 }
 
 void PlaylistManagement::on_pushButton_back_clicked()

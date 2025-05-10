@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>776</width>
+    <width>900</width>
     <height>469</height>
    </rect>
   </property>
@@ -16,9 +16,9 @@
   <widget class="QLabel" name="label_pageTitle">
    <property name="geometry">
     <rect>
-     <x>210</x>
+     <x>120</x>
      <y>20</y>
-     <width>241</width>
+     <width>331</width>
      <height>41</height>
     </rect>
    </property>
@@ -155,57 +155,63 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QPushButton" name="pushButton_uploadArtwork">
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>210</y>
-      <width>156</width>
-      <height>177</height>
+      <y>320</y>
+      <width>154</width>
+      <height>22</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout_3">
-     <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
-      <widget class="QLabel" name="label_albumArtPreview">
-       <property name="minimumSize">
-        <size>
-         <width>100</width>
-         <height>100</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>100</width>
-         <height>100</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Album Artwork</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_uploadArtwork">
-       <property name="text">
-        <string>Upload Artwork</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_addToSongLibrary">
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <pointsize>14</pointsize>
-         <italic>false</italic>
-        </font>
-       </property>
-       <property name="text">
-        <string>Add to Song Library</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <property name="text">
+     <string>Upload Artwork</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_addToSongLibrary">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>350</y>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>14</pointsize>
+      <italic>false</italic>
+     </font>
+    </property>
+    <property name="text">
+     <string>Add to Song Library</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_albumArtPreview">
+    <property name="geometry">
+     <rect>
+      <x>59</x>
+      <y>210</y>
+      <width>100</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>100</width>
+      <height>100</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>100</width>
+      <height>100</height>
+     </size>
+    </property>
+    <property name="text">
+     <string>Album Artwork</string>
+    </property>
    </widget>
   </widget>
   <widget class="QGroupBox" name="groupBox_2">

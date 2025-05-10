@@ -27,7 +27,7 @@ const QVector<Song>& SongPage::getSongLibrary() {
 
 void SongPage::loadSongs()
 {
-    QString filePath = QCoreApplication::applicationDirPath() + "/data/songs.txt";
+    QString filePath = QCoreApplication::applicationDirPath() + "/../../../data/songs.txt";
     QFile file(filePath);
 
     // Handling case for MacOS (file structure for reading .txt required is different)
@@ -71,7 +71,7 @@ void SongPage::loadSongs()
 
 void SongPage::saveSongs()
 {
-    QString filePath = QCoreApplication::applicationDirPath() + "/data/songs.txt";
+    QString filePath = QCoreApplication::applicationDirPath() + "/../../../data/songs.txt";
     if (!QFile::exists(filePath)) {
 #ifdef Q_OS_MAC
         filePath = QCoreApplication::applicationDirPath() + "/../../../../../data/songs.txt";

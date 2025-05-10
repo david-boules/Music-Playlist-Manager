@@ -5,7 +5,8 @@
 #include <QDialog>
 #include <QString>
 #include <QVector>
-
+#include "songpage.h"
+#include "playlistmanagement.h"
 // Struct containning the password, email, and role of each user to be used in the 'UsersList' map data structure
 struct UserInfo {
     QString password;
@@ -34,6 +35,12 @@ public:
 
     static void loadUsers();
     static void saveUsers();
+    QString get_username(){
+        return UserName;
+    }
+    QString get_total_playlists{
+       // return ;
+    };
 
 
     QString getLastPlayedSong();
@@ -52,6 +59,7 @@ private:
     Ui::User *ui;
     QString UserName; // temporary
     QString Password; // temporary
+    SongPage song_page;
 
     static QMap<QString, UserInfo> UsersList; // 'UsersList' - Data structure to store and handle users (for milestone 2)
 };

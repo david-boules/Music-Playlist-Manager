@@ -20,6 +20,7 @@ User::User(QString username, QString password, QWidget *parent) : QDialog(parent
 {
     ui->setupUi(this);
     ui->label_welcome->setText("Welcome, " + username + "!");
+   // ui->label_totalPlaylists->setText("Total Playlists :" +QString::number(playlist1->total_playlists()) );
 
     // temporary: so unfinished functions do not cause errors
     UserName = username;
@@ -47,7 +48,7 @@ bool User::usernameExists(const QString& username) {
 
 // Loading user info from 'users.txt' to the 'UsersList' map at startup
 void User::loadUsers() {
-    QString filePath = QCoreApplication::applicationDirPath() + "/data/users.txt";
+    QString filePath = QCoreApplication::applicationDirPath() + "/../../../data/users.txt";
     QFile file(filePath);
 
     // Handling case for MacOS (file structure for reading .txt required is different)
@@ -66,9 +67,12 @@ void User::loadUsers() {
     QTextStream in(&file);
     while (!in.atEnd()) {
         QString line = in.readLine().trimmed();
+
+
         if (line.isEmpty()) continue;
 
         QStringList fields = line.split(' ');
+
         if (fields.size() < 4) {
             qDebug() << "Invalid line format:" << line;
             continue;
@@ -85,7 +89,7 @@ void User::loadUsers() {
 
 // Writing user info to 'users.txt' when exiting the application
 void User::saveUsers() {
-    QString filePath = QCoreApplication::applicationDirPath() + "/data/users.txt";
+    QString filePath = QCoreApplication::applicationDirPath() + "/../../../data/users.txt";
     QFile file(filePath);
 
     if (!file.exists()) {
@@ -185,6 +189,7 @@ int User::getAllPlaylists() {
 
 
 
+
 /* Functions for page navigation / pop-ups
  * on_userReports_clicked
  * on_searchSongs_clicked
@@ -194,7 +199,8 @@ int User::getAllPlaylists() {
 void User::on_userReports_clicked()
 {
     hide();
-    Reports *r = new Reports(this);
+    PlaylistManagement* p = new PlaylistManagement(UserName);  // or however you build it
+    Reports *r = new Reports(this, p,this);
     r->show();
 }
 
@@ -205,6 +211,20 @@ void User::on_searchSongs_clicked() {
         QMessageBox::warning(this, "Input Error", "Song title is empty.");
         return;
     }
+    const QVector<Song>& songs = song_page.getSongLibrary();
+    bool found=false;
+    for (const Song& song : songs) {
+        if (song.getTitle().compare(songToFind, Qt::CaseInsensitive) == 0) {
+            QMessageBox::information(this, "Search Result", "🎵 Song found!");
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        QMessageBox::warning(this, "Not Found", "No song with that title exists in the library.");
+    }
+
 
     // Determine the directory path where playlists are stored
     QString appPath = QCoreApplication::applicationDirPath();
@@ -216,7 +236,7 @@ void User::on_searchSongs_clicked() {
 
     QStringList foundInPlaylists;
 
-    bool found = false;
+   // bool found = false;
 
     // Search through each playlist file
     for (QString &fileName : playlistFiles) {

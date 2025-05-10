@@ -22,6 +22,8 @@ public:
     static const QVector<Playlist>& getUserPlaylist(const QString& username);
     static void addUserPlaylist(const QString& username, const Playlist& p);
     static void saveAllPlaylists();
+    int total_playlists() const;
+
 
     ~PlaylistManagement();
 
