@@ -26,16 +26,19 @@ public:
     ~PlaylistManagement();
 
 private slots:
-
     void on_pushButton_back_clicked();
     void on_createPlaylist_clicked();
     void on_listWidget_playlists_itemClicked(QListWidgetItem *item);
+    void on_AddSong_clicked();
+    void on_DeleteSong_clicked();
+    void on_RenamePlaylist_clicked();
+    void on_DeletePlaylist_clicked();
 
 private:
     Ui::PlaylistManagement *ui;
 
     QString username;
-    QVector<Playlist> playlists;
+    QVector<Playlist>* playlists;
     static QMap<QString, QVector<Playlist>> AllPlaylists;
 
     void refreshSongList(const Playlist &p);

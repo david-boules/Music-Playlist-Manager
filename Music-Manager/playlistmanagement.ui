@@ -140,7 +140,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="createPlaylist_2">
+     <widget class="QPushButton" name="RenamePlaylist">
       <property name="minimumSize">
        <size>
         <width>120</width>
@@ -159,7 +159,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="createPlaylist_3">
+     <widget class="QPushButton" name="DeletePlaylist">
       <property name="minimumSize">
        <size>
         <width>120</width>

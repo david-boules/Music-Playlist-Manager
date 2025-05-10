@@ -2,6 +2,7 @@
 Nour El Ein,Amr Diab,Nour El Ein,5:08
 Qadeyet Am Ahmed,Omar Khairat,Am Ahmed,5:36
 Nassam Alayna El Hawa,Fairuz,Bent El Hares,4:03
+Dorak gai,Wegz,n,4:18
 #Classics
 Bad,Michael Jackson,Bad 25th Anniversary,4:08
 Gangsta's Paradise,Coolio,Gangsta's Paradise,4:01
@@ -13,7 +14,5 @@ Billie Jean,Michael Jackson,Thriller,4:54
 Sunrise,Slaptop,Sunrise,3:34
 #xyz
 Song1,Artist1,Album1,3:00
-#xyz
-Song1,Artist1,Album1,3:00
-#abc
+#abcdef
 Bad,Michael Jackson,Bad 25th Anniversary,4:08

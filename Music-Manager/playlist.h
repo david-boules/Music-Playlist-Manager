@@ -14,6 +14,10 @@ public:
     void deleteSong(const QString &title);
     int numSongs() const;
 
+    void removeSong(int index);
+    void setName(const QString& _name);
+
+
     QString getName() const;
     const QVector<Song>& getSongs() const;
 
