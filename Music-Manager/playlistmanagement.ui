@@ -116,21 +116,7 @@
      <height>40</height>
     </rect>
    </property>
-   <property name="minimumSize">
-    <size>
-     <width>120</width>
-     <height>40</height>
-    </size>
-   </property>
-   <property name="font">
-    <font>
-     <family>Arial</family>
-     <pointsize>16</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>Create Playlist</string>
-   </property>
+
   </widget>
   <widget class="QPushButton" name="createPlaylist_2">
    <property name="geometry">

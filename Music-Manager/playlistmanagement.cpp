@@ -16,10 +16,11 @@ PlaylistManagement::PlaylistManagement(QString username, QWidget *parent)
     ui->label_PMTitle->setText(username + "'s Playlist Management Page");
     connect(ui->listWidget_playlists, &QListWidget::itemClicked, this, &PlaylistManagement::on_listWidget_playlists_itemClicked);
 
-    playlists = AllPlaylists[username];
-    for(const Playlist& playlist : playlists) {
+    playlists = &AllPlaylists[username];
+    for (const Playlist &playlist : *playlists) {
         ui->listWidget_playlists->addItem(playlist.getName());
     }
+
 
     ui->tableWidget_songs->setColumnCount(4);
     ui->tableWidget_songs->setHorizontalHeaderLabels({"Title", "Artist", "Album", "Duration"});
@@ -36,11 +37,12 @@ QMap<QString, QVector<Playlist>> PlaylistManagement::AllPlaylists;
 
 Playlist* PlaylistManagement::getPlaylist(const QString &name)
 {
-    for (Playlist &p : playlists)
+    for (Playlist &p : *playlists)  // Dereference the pointer
         if (p.getName() == name)
             return &p;
     return nullptr;
 }
+
 
 void PlaylistManagement::addUserPlaylist(const QString& username, const Playlist& p) {
     AllPlaylists[username].append(p);
@@ -72,6 +74,7 @@ void PlaylistManagement::loadPlaylists() {
     QStringList playlistFiles = dir.entryList(QStringList() << "*.txt", QDir::Files);
 
     for (const QString& fileName : playlistFiles) {
+
         QString username = fileName.section(".", 0, 0); // Extracting the username from the .txt filename
         QFile file(dir.absoluteFilePath(fileName));
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) continue;
@@ -106,6 +109,7 @@ void PlaylistManagement::loadPlaylists() {
     }
 }
 
+/*
 void PlaylistManagement::saveAllPlaylists() {
     for(auto it = AllPlaylists.begin(); it != AllPlaylists.end(); it++) {
         QString username = it.key();
@@ -131,6 +135,38 @@ void PlaylistManagement::saveAllPlaylists() {
         file.close();
     }
 }
+*/
+
+void PlaylistManagement::saveAllPlaylists() {
+    QString basePath = QCoreApplication::applicationDirPath() + "/../../data/playlists/";
+
+#ifdef Q_OS_MAC
+    QDir macTest(basePath);
+    if (!macTest.exists()) {
+        basePath = QCoreApplication::applicationDirPath() + "/../../../../../data/playlists/";
+    }
+#endif
+
+    for (auto it = AllPlaylists.begin(); it != AllPlaylists.end(); ++it) {
+        QString username = it.key();
+        QString filePath = basePath + username + ".txt";  // ✅ Match the filename format used in loadPlaylists()
+
+        QFile file(filePath);
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+            continue;
+
+        QTextStream output(&file);
+        for (const Playlist &playlist : it.value()) {
+            output << "#" << playlist.getName() << "\n";
+            for (const Song &song : playlist.getSongs()) {
+                output << song.getTitle() << "," << song.getArtist() << "," << song.getAlbum() << "," << song.getDuration() << "\n";
+            }
+        }
+
+        file.close();
+    }
+}
+
 
 const QVector<Playlist>& PlaylistManagement::getUserPlaylist(const QString& username){
     return AllPlaylists[username];
@@ -152,10 +188,10 @@ void PlaylistManagement::on_createPlaylist_clicked()
     PlaylistCreator *pc = new PlaylistCreator(username, this);
     pc->show();
 
-    playlists = AllPlaylists[username];
+    *playlists = AllPlaylists[username];
     ui->listWidget_playlists->clear();
 
-    for(const Playlist& playlist : playlists)
+    for(const Playlist& playlist : *playlists)
         ui->listWidget_playlists->addItem(playlist.getName());
 }
 
@@ -181,4 +217,108 @@ void PlaylistManagement::on_listWidget_playlists_itemClicked(QListWidgetItem *it
 
     }
 }
+
+void PlaylistManagement::on_AddSong_clicked() {
+    QListWidgetItem* currentItem = ui->listWidget_playlists->currentItem();
+    if (!currentItem) {
+        QMessageBox::warning(this, "No Playlist", "Please select a playlist to add a song.");
+        return;
+    }
+
+    Playlist* p = getPlaylist(currentItem->text());
+    if (!p)
+        return;
+
+    QString title = QInputDialog::getText(this, "Add Song", "Title:");
+    if (title.isEmpty())
+        return;
+
+    QString artist = QInputDialog::getText(this, "Add Song", "Artist:");
+    QString album = QInputDialog::getText(this, "Add Song", "Album:");
+    QString duration = QInputDialog::getText(this, "Add Song", "Duration:");
+
+    p->addSong(Song(title, artist, album, duration));
+
+    // To save the added song
+    saveAllPlaylists();
+
+    // To refresh the view
+    on_listWidget_playlists_itemClicked(currentItem);
+}
+
+void PlaylistManagement::on_DeleteSong_clicked() {
+    QListWidgetItem* currentItem = ui->listWidget_playlists->currentItem();
+    if (!currentItem)
+        return;
+
+    Playlist* p = getPlaylist(currentItem->text());
+    if (!p)
+        return;
+
+    int row = ui->tableWidget_songs->currentRow();
+    if (row < 0 || row >= p->getSongs().size())
+        return;
+
+    p->removeSong(row);  // NEED in Playlist class to have a removeSong(int index) method
+
+    // To save the changes
+    saveAllPlaylists();
+
+    on_listWidget_playlists_itemClicked(currentItem);
+}
+
+void PlaylistManagement::on_RenamePlaylist_clicked() {
+    QListWidgetItem* currentItem = ui->listWidget_playlists->currentItem();
+    if (!currentItem)
+        return;
+
+    Playlist* p = getPlaylist(currentItem->text());
+    if (!p) return;
+
+    QString newName = QInputDialog::getText(this, "Rename Playlist", "New Name:");
+    if (newName.isEmpty())
+        return;
+
+    p->setName(newName);
+    currentItem->setText(newName);
+
+    saveAllPlaylists();
+}
+
+void PlaylistManagement::on_DeletePlaylist_clicked() {
+    QListWidgetItem* currentItem = ui->listWidget_playlists->currentItem();
+    if (!currentItem) {
+        QMessageBox::warning(this, "No Playlist Selected", "Please select a playlist to delete.");
+        return;
+    }
+
+    QString playlistName = currentItem->text();
+
+    QMessageBox::StandardButton confirm = QMessageBox::question(
+        this, "Confirm Deletion", "Are you sure you want to delete the playlist \"" + playlistName + "\"?",
+        QMessageBox::Yes | QMessageBox::No);
+
+    if (confirm == QMessageBox::No)
+        return;
+
+    // Remove playlist from vector
+    for (int i = 0; i < playlists->size(); i++) {
+        if ((*playlists)[i].getName() == playlistName) {
+            playlists->remove(i);
+            break;
+        }
+    }
+
+    // Remove from UI
+    delete currentItem;
+
+    // Clear songs table
+    ui->tableWidget_songs->clearContents();
+    ui->tableWidget_songs->setRowCount(0);
+
+    saveAllPlaylists();
+
+    QMessageBox::information(this, "Deleted", "Playlist \"" + playlistName + "\" is deleted.");
+}
+
 
