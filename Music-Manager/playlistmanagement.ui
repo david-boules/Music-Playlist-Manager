@@ -241,20 +241,11 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="label">
-      <property name="font">
-       <font>
-        <family>Arial</family>
-        <pointsize>14</pointsize>
-       </font>
-      </property>
+     <widget class="QPushButton" name="SearchSong">
       <property name="text">
-       <string>Search Song:</string>
+       <string>Search Song</string>
       </property>
      </widget>
-    </item>
-    <item>
-     <widget class="QLineEdit" name="lineEdit_2"/>
     </item>
    </layout>
   </widget>
