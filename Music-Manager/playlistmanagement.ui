@@ -178,20 +178,23 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="label_3">
-      <property name="font">
-       <font>
-        <family>Arial</family>
-        <pointsize>14</pointsize>
-       </font>
+     <widget class="QPushButton" name="SearchPlaylist">
+      <property name="minimumSize">
+       <size>
+        <width>154</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>154</width>
+        <height>32</height>
+       </size>
       </property>
       <property name="text">
-       <string>Search Playlist:</string>
+       <string>Search Playlist</string>
       </property>
      </widget>
-    </item>
-    <item>
-     <widget class="QLineEdit" name="lineEdit"/>
     </item>
    </layout>
   </widget>
