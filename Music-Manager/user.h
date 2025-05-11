@@ -1,6 +1,9 @@
 #ifndef USER_H
 #define USER_H
 
+#include <QMediaPlayer>
+
+#include <QUrl>
 #include <QMessageBox>
 #include <QDialog>
 #include <QString>
@@ -55,12 +58,20 @@ private slots:
     void on_searchSongs_clicked();
     void on_pushButton_back_clicked();
 
+    void on_play_song_clicked();
+
+    void on_pause_song_clicked();
+
 private:
     Ui::User *ui;
     QString UserName; // temporary
     QString Password; // temporary
     SongPage song_page;
     PlaylistManagement* playlist1;
+     QMediaPlayer* player;
+    QAudioOutput* audioOutput;
+    QPushButton* play_pause;
+    bool isPlaying;
 
     static QMap<QString, UserInfo> UsersList; // 'UsersList' - Data structure to store and handle users (for milestone 2)
 };

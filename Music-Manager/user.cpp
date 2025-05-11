@@ -10,15 +10,26 @@
 #include <QTextStream>
 #include <QCoreApplication> //To access the path where the application is running (e.g., the folder containing the .exe or .app file).
 #include <QDebug>
-
+#include <QMediaPlayer>
+#include <QMediaMetaData>
+#include <QAudioOutput>
 
 using namespace std;
 
 QMap<QString, UserInfo> User::UsersList;
 
-User::User(QString username, QString password, PlaylistManagement* playlist, QWidget *parent) : QDialog(parent) , ui(new Ui::User),playlist1(playlist)
+User::User(QString username, QString password, PlaylistManagement* playlist, QWidget *parent) : QDialog(parent) , ui(new Ui::User),playlist1(playlist),isPlaying(false)
 {
+    // Initialize player
+    player = new QMediaPlayer(this);
+
+
     ui->setupUi(this);
+
+    connect(ui->play_song, &QPushButton::clicked, this, &User::on_play_song_clicked);
+    connect(ui->pause_song, &QPushButton::clicked, this, &User::on_pause_song_clicked);
+
+   // connect(ui->play_song, &QPushButton::clicked, this, &User::on_play_song_clicked);
     ui->label_welcome->setText("Welcome, " + username + "!");
 
     ui->label_totalPlaylists->setText("Total Playlists :" +QString::number(playlist1->total_playlists()) );
@@ -214,18 +225,52 @@ void User::on_searchSongs_clicked() {
         return;
     }
     const QVector<Song>& songs = song_page.getSongLibrary();
-    bool found=false;
+    bool found = false;
+    QString songFilePath; // Store the file path if the song is found
+
+    // Search through the songs to find a match
     for (const Song& song : songs) {
         if (song.getTitle().compare(songToFind, Qt::CaseInsensitive) == 0) {
-            QMessageBox::information(this, "Search Result", "🎵 Song found!");
             found = true;
-            break;
+            songFilePath = QCoreApplication::applicationDirPath() + "/../../../songs/" + song.getTitle().trimmed() + ".mp3";
+            break; // Exit the loop once the song is found
         }
-    }
-
-    if (!found) {
+    }      if (!found) {
         QMessageBox::warning(this, "Not Found", "No song with that title exists in the library.");
     }
+    else{
+     QMessageBox::information(this, "Song Found", "🎵 Playing " + songToFind);
+    }
+
+
+
+          // Check if the file exists
+    if (!QFile::exists(songFilePath)) {
+        QMessageBox::warning(this, "File Missing", "Audio file not found in 'songs' folder.");
+        return;
+    }
+    QMediaPlayer* player = new QMediaPlayer(this);
+
+    // Set up the audio output
+    QAudioOutput* audioOutput = new QAudioOutput(this);
+    player->setAudioOutput(audioOutput);
+
+    // Set the media source
+    player->setSource(QUrl::fromLocalFile(songFilePath));
+
+    // Set volume and start playing
+    audioOutput->setVolume(50);  // Set volume to 50%
+    player->play();    // Start playback
+
+
+           // QMediaPlayer* player = new QMediaPlayer(this);
+
+
+
+
+
+
+
 
 
     // Determine the directory path where playlists are stored
@@ -269,6 +314,7 @@ void User::on_searchSongs_clicked() {
     }
 }
 
+
 void User::on_viewPlaylists_clicked() {
     hide();
     PlaylistManagement *pm = new PlaylistManagement(UserName, this);
@@ -282,3 +328,30 @@ void User::on_pushButton_back_clicked()
         parentWidget()->show(); //therefore can be used to go back
     }
 }
+
+
+void User::on_play_song_clicked()
+{
+ qDebug() << "Play button clicked!";
+    player->play();
+}
+    // if (isPlaying) {
+    //     player->pause();
+    //     ui->play_song->setText("Play");
+    // }
+    // // If the player is paused, resume it
+    // else {
+    //     player->play();
+    //     ui->play_song->setText("Pause");
+    // }
+    // // Toggle the isPlaying flag
+    // isPlaying = !isPlaying;
+
+
+
+void User::on_pause_song_clicked()
+{
+    player->pause();
+}
+
+
