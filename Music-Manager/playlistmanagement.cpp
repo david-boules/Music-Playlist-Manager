@@ -2,12 +2,14 @@
 #include "ui_playlistmanagement.h"
 #include "playlist.h"
 #include "playlistcreator.h"
+#include "songpage.h"
 #include <QInputDialog>
 #include <QDir>
 #include <QStringList>
 #include <QFile>
 #include <QTextStream>
 #include <QMessageBox>
+#include <QShowEvent>
 
 PlaylistManagement::PlaylistManagement(QString username, QWidget *parent)
     : QDialog(parent), ui(new Ui::PlaylistManagement), username(username)
@@ -35,9 +37,21 @@ PlaylistManagement::~PlaylistManagement()
 
 QMap<QString, QVector<Playlist>> PlaylistManagement::AllPlaylists;
 
+void PlaylistManagement::showEvent(QShowEvent *event) {
+    QDialog::showEvent(event);
+
+    // Syncing with the latest playlists
+    *playlists = AllPlaylists[username];
+
+    ui->listWidget_playlists->clear();
+    for (const Playlist& playlist : *playlists) {
+        ui->listWidget_playlists->addItem(playlist.getName());
+    }
+}
+
 Playlist* PlaylistManagement::getPlaylist(const QString &name)
 {
-    for (Playlist &p : *playlists)  // Dereference the pointer
+    for (Playlist &p : *playlists)
         if (p.getName() == name)
             return &p;
     return nullptr;
@@ -137,8 +151,9 @@ void PlaylistManagement::saveAllPlaylists() {
 }
 */
 
+
 void PlaylistManagement::saveAllPlaylists() {
-    QString basePath = QCoreApplication::applicationDirPath() + "/../../data/playlists/";
+    QString basePath = QCoreApplication::applicationDirPath() + "/../../../data/playlists/";
 
 #ifdef Q_OS_MAC
     QDir macTest(basePath);
@@ -147,9 +162,9 @@ void PlaylistManagement::saveAllPlaylists() {
     }
 #endif
 
-    for (auto it = AllPlaylists.begin(); it != AllPlaylists.end(); ++it) {
+    for (auto it = AllPlaylists.begin(); it != AllPlaylists.end(); it++) {
         QString username = it.key();
-        QString filePath = basePath + username + ".txt";  // ✅ Match the filename format used in loadPlaylists()
+        QString filePath = basePath + username + ".txt";  // Match the filename format used in loadPlaylists()
 
         QFile file(filePath);
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -219,6 +234,7 @@ void PlaylistManagement::on_listWidget_playlists_itemClicked(QListWidgetItem *it
 }
 
 void PlaylistManagement::on_AddSong_clicked() {
+
     QListWidgetItem* currentItem = ui->listWidget_playlists->currentItem();
     if (!currentItem) {
         QMessageBox::warning(this, "No Playlist", "Please select a playlist to add a song.");
@@ -229,43 +245,69 @@ void PlaylistManagement::on_AddSong_clicked() {
     if (!p)
         return;
 
-    QString title = QInputDialog::getText(this, "Add Song", "Title:");
-    if (title.isEmpty())
+    QString title = QInputDialog::getText(this, "Add Song", "Enter Song Title:");
+    if (title.trimmed().isEmpty()) {
+        QMessageBox::warning(this, "Error", "Song title cannot be empty.");
         return;
+    }
 
-    QString artist = QInputDialog::getText(this, "Add Song", "Artist:");
-    QString album = QInputDialog::getText(this, "Add Song", "Album:");
-    QString duration = QInputDialog::getText(this, "Add Song", "Duration:");
+    const QVector<Song>& library = SongPage::getSongLibrary();
+    bool found = false;
+    Song foundSong;
 
-    p->addSong(Song(title, artist, album, duration));
+    // Checking if the song is in the song library
+    for (const Song& song : library) {
+        if (song.getTitle().compare(title, Qt::CaseInsensitive) == 0) { // Case-Insensitivity for adding songs
+            foundSong = song;
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        QMessageBox::warning(this, "Not Found", "Song not found in library.");
+        return;
+    }
 
-    // To save the added song
-    saveAllPlaylists();
+    // Prevent adding a duplicate song
+    for (const Song& s : p->getSongs()) {
+        if (s == foundSong) {
+            QMessageBox::warning(this, "Duplicate Song", "This song already exists in the playlist.");
+            return;
+        }
+    }
 
-    // To refresh the view
-    on_listWidget_playlists_itemClicked(currentItem);
+    // Add the song to the playlist
+    p->addSong(foundSong);
+    on_listWidget_playlists_itemClicked(currentItem); // Refresh view
 }
 
 void PlaylistManagement::on_DeleteSong_clicked() {
     QListWidgetItem* currentItem = ui->listWidget_playlists->currentItem();
-    if (!currentItem)
+    if (!currentItem) {
+        QMessageBox::warning(this, "Error", "No playlist selected");
         return;
-
+    }
     Playlist* p = getPlaylist(currentItem->text());
     if (!p)
         return;
 
     int row = ui->tableWidget_songs->currentRow();
-    if (row < 0 || row >= p->getSongs().size())
+    if (row < 0 || row >= p->getSongs().size()) {
+        QMessageBox::warning(this, "Error", "No song selected");
         return;
+    }
 
-    p->removeSong(row);  // NEED in Playlist class to have a removeSong(int index) method
+    // To prevent deleting the last song and having an empty playlist
+    if (p->getSongs().size() == 1) {
+        QMessageBox::warning(this, "Not Allowed", "Playlists must contain at least one song.");
+        return;
+    }
 
-    // To save the changes
-    saveAllPlaylists();
-
+    p->removeSong(row);
+    // Refresh the view
     on_listWidget_playlists_itemClicked(currentItem);
 }
+
 
 void PlaylistManagement::on_RenamePlaylist_clicked() {
     QListWidgetItem* currentItem = ui->listWidget_playlists->currentItem();
@@ -275,14 +317,21 @@ void PlaylistManagement::on_RenamePlaylist_clicked() {
     Playlist* p = getPlaylist(currentItem->text());
     if (!p) return;
 
-    QString newName = QInputDialog::getText(this, "Rename Playlist", "New Name:");
-    if (newName.isEmpty())
+    QString newName = QInputDialog::getText(this, "Rename Playlist", "New Name:").trimmed();
+    if (newName.isEmpty()) {
+        QMessageBox::warning(this, "Empty Name", "Playlist name cannot be empty");
         return;
+    }
+
+    for (const Playlist& existingPlaylist : *playlists) {
+        if (existingPlaylist.getName() == newName && &existingPlaylist != p) {
+            QMessageBox::warning(this, "Duplicate Name", "A playlist with the name\"" + newName + "\" already exists.");
+            return;
+        }
+    }
 
     p->setName(newName);
     currentItem->setText(newName);
-
-    saveAllPlaylists();
 }
 
 void PlaylistManagement::on_DeletePlaylist_clicked() {
@@ -316,11 +365,8 @@ void PlaylistManagement::on_DeletePlaylist_clicked() {
     ui->tableWidget_songs->clearContents();
     ui->tableWidget_songs->setRowCount(0);
 
-    saveAllPlaylists();
-
     QMessageBox::information(this, "Deleted", "Playlist \"" + playlistName + "\" is deleted.");
 }
-
 
 
 void PlaylistManagement::on_SearchSong_clicked()
@@ -351,3 +397,30 @@ void PlaylistManagement::on_SearchSong_clicked()
         QMessageBox::information(this, "Song Found", message);
     }
 }
+
+void PlaylistManagement::on_SearchPlaylist_clicked()
+{
+    QString name = QInputDialog::getText(this, "Search Playlist", "Enter Playlist Name:");
+    if (name.trimmed().isEmpty()) {
+        QMessageBox::warning(this, "Input Error", "Please enter a playlist name.");
+        return;
+    }
+
+    // Loop through items in the list widget
+    bool found = false;
+    for (int i = 0; i < ui->listWidget_playlists->count(); ++i) {
+        QListWidgetItem* item = ui->listWidget_playlists->item(i);
+        if (item->text().compare(name, Qt::CaseInsensitive) == 0) {
+            // Highlight the found playlist
+            ui->listWidget_playlists->setCurrentItem(item);
+            on_listWidget_playlists_itemClicked(item);  // auto-load songs
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        QMessageBox::information(this, "Not Found", "No playlist named \"" + name + "\" was found.");
+    }
+}
+

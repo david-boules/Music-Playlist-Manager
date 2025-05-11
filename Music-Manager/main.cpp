@@ -12,7 +12,6 @@ int main(int argc, char *argv[])
     User::loadUsers(); //Users are loaded in at system startup
     SongPage::loadSongs(); // Songs are loaded in at system startup
     PlaylistManagement::loadPlaylists(); // All user playlists are loaded in at system startup
-    //PlaylistManagement::loadPlaylists(); // Playlists are loaded in at system startup
 
     MainWindow w;
     w.show();

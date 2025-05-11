@@ -56,11 +56,21 @@ void PlaylistCreator::on_createPlaylist_clicked()
         return;
     }
 
+    const QVector<Playlist>& existingPlaylists = PlaylistManagement::getUserPlaylist(user);
+    for (const Playlist& playlist: existingPlaylists) {
+        if (playlist.getName() == playlistName) {
+            QMessageBox::warning(this, "Duplicate Name", "A playlist with the name\"" + playlistName + "\" already exists.");
+            return;
+        }
+    }
+
     QList<QTableWidgetSelectionRange> ranges = ui->tableWidget_songs->selectedRanges();
     if(ranges.isEmpty()) {
         QMessageBox::warning(this, "Error", "Select at least one song.");
         return;
     }
+
+
 
     Playlist newPlaylist(playlistName);
     for (const auto& range: ranges) {
