@@ -18,6 +18,11 @@ PlaylistManagement::PlaylistManagement(QString username, QWidget *parent)
     ui->label_PMTitle->setText(username + "'s Playlist Management Page");
     connect(ui->listWidget_playlists, &QListWidget::itemClicked, this, &PlaylistManagement::on_listWidget_playlists_itemClicked);
 
+    player = new QMediaPlayer(this);
+    audioOutput = new QAudioOutput(this);
+    player->setAudioOutput(audioOutput);
+    audioOutput->setVolume(50);
+
     playlists = &AllPlaylists[username];
     for (const Playlist &playlist : *playlists) {
         ui->listWidget_playlists->addItem(playlist.getName());
@@ -371,31 +376,7 @@ void PlaylistManagement::on_DeletePlaylist_clicked() {
 
 void PlaylistManagement::on_SearchSong_clicked()
 {
-    QString searchTitle = QInputDialog::getText(this, "Search Song", "Enter Song Title:");
-    if (searchTitle.trimmed().isEmpty()) {
-        QMessageBox::warning(this, "Input Error", "Please enter a song title.");
-        return;
-    }
 
-    QStringList matchingPlaylists;
-
-    for (const Playlist &playlist : *playlists) {
-        for (const Song &song : playlist.getSongs()) {
-            if (song.getTitle().compare(searchTitle, Qt::CaseInsensitive) == 0) {
-                matchingPlaylists.append(playlist.getName());
-                break;
-            }
-        }
-    }
-
-    if (matchingPlaylists.isEmpty()) {
-        QMessageBox::information(this, "Not Found",
-                                 "No song with title \"" + searchTitle + "\" was found.");
-    } else {
-        QString message = "The song \"" + searchTitle + "\" was found in:\n"
-                          + matchingPlaylists.join("\n");
-        QMessageBox::information(this, "Song Found", message);
-    }
 }
 
 void PlaylistManagement::on_SearchPlaylist_clicked()
@@ -422,5 +403,43 @@ void PlaylistManagement::on_SearchPlaylist_clicked()
     if (!found) {
         QMessageBox::information(this, "Not Found", "No playlist named \"" + name + "\" was found.");
     }
+}
+
+
+void PlaylistManagement::on_play_song_clicked() {
+    QListWidgetItem* selectedPlaylist = ui->listWidget_playlists->currentItem();
+    int selectedRow = ui->tableWidget_songs->currentRow();
+
+    if (!selectedPlaylist || selectedRow < 0) {
+        QMessageBox::warning(this, "Selection Error", "Please select a playlist and a song.");
+        return;
+    }
+
+    Playlist* playlist = getPlaylist(selectedPlaylist->text());
+    if (!playlist || selectedRow >= playlist->getSongs().size()) return;
+
+    QString songTitle = playlist->getSongs()[selectedRow].getTitle().trimmed();
+    QString songPath = QCoreApplication::applicationDirPath() + "/../../../data/songs/" + songTitle + ".mp3";
+
+    #ifdef Q_OS_MAC
+    if (!QFile::exists(songPath))
+        songPath = QCoreApplication::applicationDirPath() + "/../../../../../data/songs/" + songTitle + ".mp3";
+    #endif
+
+    if (!QFile::exists(songPath)) {
+        QMessageBox::warning(this, "File Error", "MP3 file not found for song: " + songTitle);
+        return;
+    }
+
+    player->setSource(QUrl::fromLocalFile(songPath));
+    player->play();
+
+    QMessageBox::information(this, "Now Playing", "🎵 " + songTitle);
+}
+
+
+void PlaylistManagement::on_pause_song_clicked()
+{
+    player->pause();
 }
 

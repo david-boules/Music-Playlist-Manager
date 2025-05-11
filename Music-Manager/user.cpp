@@ -18,25 +18,19 @@ using namespace std;
 
 QMap<QString, UserInfo> User::UsersList;
 
-User::User(QString username, QString password, PlaylistManagement* playlist, QWidget *parent) : QDialog(parent) , ui(new Ui::User),playlist1(playlist),isPlaying(false)
+User::User(QString username, QString password, PlaylistManagement* playlist, QWidget *parent) : QDialog(parent) , ui(new Ui::User),playlist1(playlist)
 {
-    // Initialize player
-    player = new QMediaPlayer(this);
-
-
     ui->setupUi(this);
 
-    connect(ui->play_song, &QPushButton::clicked, this, &User::on_play_song_clicked);
-    connect(ui->pause_song, &QPushButton::clicked, this, &User::on_pause_song_clicked);
 
-   // connect(ui->play_song, &QPushButton::clicked, this, &User::on_play_song_clicked);
     ui->label_welcome->setText("Welcome, " + username + "!");
-
     ui->label_totalPlaylists->setText("Total Playlists :" +QString::number(playlist1->total_playlists()) );
 
-    // temporary: so unfinished functions do not cause errors
     UserName = username;
     Password = password;
+
+    QString lastPlayed = User::getLastPlayed(UserName);
+    ui->label_lastPlayedSong->setText("Last Played: " + lastPlayed);
 
 }
 User::~User()
@@ -119,6 +113,43 @@ void User::saveUsers() {
     file.close();
 }
 
+QMap<QString, QString> User::LastPlayedMap;
+void User::loadLastPlayedSongs() {
+    QString path = QCoreApplication::applicationDirPath() + "/../../../data/lastPlayed.txt";
+#ifdef Q_OS_MAC
+    if (!QFile::exists(path))
+        path = QCoreApplication::applicationDirPath() + "/../../../../../data/lastPlayed.txt";
+#endif
+
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
+
+    QTextStream in(&file);
+    while (!in.atEnd()) {
+        QString line = in.readLine().trimmed();
+        QStringList parts = line.split(' ', Qt::SkipEmptyParts);
+        if (parts.size() >= 2)
+            LastPlayedMap[parts[0]] = parts.mid(1).join(" ");  // song may contain spaces
+    }
+    file.close();
+}
+
+void User::saveLastPlayedSongs() {
+    QString path = QCoreApplication::applicationDirPath() + "/../../../data/lastPlayed.txt";
+#ifdef Q_OS_MAC
+    path = QCoreApplication::applicationDirPath() + "/../../../../../data/lastPlayed.txt";
+#endif
+
+    QFile file(path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) return;
+
+    QTextStream out(&file);
+    for (auto it = LastPlayedMap.begin(); it != LastPlayedMap.end(); ++it) {
+        out << it.key() << " " << it.value().trimmed() << "\n";
+    }
+    file.close();
+}
+
 // Checking whehter the right username and password have been entered
 bool User::validateCredentials(const QString &username, const QString &password) {
 
@@ -194,8 +225,13 @@ int User::getAllPlaylists() {
     return files.count(); ;
 }
 
+void User::setLastPlayed(const QString& username, const QString& song) {
+    LastPlayedMap[username] = song.trimmed();
+}
 
-
+QString User::getLastPlayed(const QString& username) {
+    return LastPlayedMap.value(username, "N/A");
+}
 
 /* Functions for page navigation / pop-ups
  * on_userReports_clicked
@@ -212,98 +248,28 @@ void User::on_userReports_clicked()
 }
 
 void User::on_searchSongs_clicked() {
-    // Ask the user to input the song title to search for
     QString songToFind = QInputDialog::getText(this, "Search Songs", "Enter Song Title:");
     if (songToFind.trimmed().isEmpty()) {
         QMessageBox::warning(this, "Input Error", "Song title is empty.");
         return;
     }
-    const QVector<Song>& songs = song_page.getSongLibrary();
-    bool found = false;
-    QString songFilePath; // Store the file path if the song is found
 
-    // Search through the songs to find a match
-    for (const Song& song : songs) {
-        if (song.getTitle().compare(songToFind, Qt::CaseInsensitive) == 0) {
-            found = true;
-            songFilePath = QCoreApplication::applicationDirPath() + "/../../../songs/" + song.getTitle().trimmed() + ".mp3";
-            break; // Exit the loop once the song is found
-        }
-    }      if (!found) {
-        QMessageBox::warning(this, "Not Found", "No song with that title exists in the library.");
-    }
-    else{
-     QMessageBox::information(this, "Song Found", "🎵 Playing " + songToFind);
-    }
+    const QVector<Playlist>& userPlaylists = PlaylistManagement::getUserPlaylist(UserName);
+    QStringList foundIn;
 
-
-
-          // Check if the file exists
-    if (!QFile::exists(songFilePath)) {
-        QMessageBox::warning(this, "File Missing", "Audio file not found in 'songs' folder.");
-        return;
-    }
-    QMediaPlayer* player = new QMediaPlayer(this);
-
-    // Set up the audio output
-    QAudioOutput* audioOutput = new QAudioOutput(this);
-    player->setAudioOutput(audioOutput);
-
-    // Set the media source
-    player->setSource(QUrl::fromLocalFile(songFilePath));
-
-    // Set volume and start playing
-    audioOutput->setVolume(50);  // Set volume to 50%
-    player->play();    // Start playback
-
-
-           // QMediaPlayer* player = new QMediaPlayer(this);
-
-
-
-
-
-
-
-
-
-    // Determine the directory path where playlists are stored
-    QString appPath = QCoreApplication::applicationDirPath();
-    QDir dir(appPath);
-
-    // Find all playlist files that belong to this user; the pattern matches UserName_*.txt "ALex_*.txt" with "Alex_Workout.txt"
-
-    QStringList playlistFiles = dir.entryList(QStringList() << UserName + "_*.txt", QDir::Files);
-
-    QStringList foundInPlaylists;
-
-   // bool found = false;
-
-    // Search through each playlist file
-    for (QString &fileName : playlistFiles) {
-        QFile file(appPath + "/" + fileName);
-        QTextStream in(&file);
-        // Keep reading till the textstream end
-        while (!in.atEnd()) {
-          QString line = in.readLine().trimmed();
-            if (line.contains(songToFind, Qt::CaseInsensitive)) // Check if the line contains the song title; ignore case.
-            {
-                found = true;
-                foundInPlaylists.append(fileName);
+    for (const Playlist& playlist : userPlaylists) {
+        for (const Song& song : playlist.getSongs()) {
+            if (song.getTitle().compare(songToFind, Qt::CaseInsensitive) == 0) {
+                foundIn.append(playlist.getName());
                 break;
             }
         }
-        file.close();
     }
 
-    // Display results to the user
-    if (!found)
-    {
-        QMessageBox::information(this, "Not Found", "The song was not found in any of your playlists.");
-    }
-    else
-    {
-        QString message = "The song was found in:\n" + foundInPlaylists.join("\n");
+    if (foundIn.isEmpty()) {
+        QMessageBox::information(this, "Not Found", "The song \"" + songToFind + "\" was not found in any of your playlists.");
+    } else {
+        QString message = "The song \"" + songToFind + "\" was found in the following playlist(s):\n" + foundIn.join("\n");
         QMessageBox::information(this, "Song Found", message);
     }
 }
@@ -321,31 +287,6 @@ void User::on_pushButton_back_clicked()
     if (parentWidget()) { //returns a pointer to the widget that opened the current window (checking to make sure a parent exists)
         parentWidget()->show(); //therefore can be used to go back
     }
-}
-
-
-void User::on_play_song_clicked()
-{
- qDebug() << "Play button clicked!";
-    player->play();
-}
-    // if (isPlaying) {
-    //     player->pause();
-    //     ui->play_song->setText("Play");
-    // }
-    // // If the player is paused, resume it
-    // else {
-    //     player->play();
-    //     ui->play_song->setText("Pause");
-    // }
-    // // Toggle the isPlaying flag
-    // isPlaying = !isPlaying;
-
-
-
-void User::on_pause_song_clicked()
-{
-    player->pause();
 }
 
 

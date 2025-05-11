@@ -5,6 +5,8 @@
 #include <QVector>
 #include <QLabel>
 #include <QListWidgetItem>
+#include <QMediaPlayer>
+#include <QAudioOutput>
 #include <QWidget>
 #include <QShowEvent>
 #include "playlist.h"
@@ -40,6 +42,10 @@ private slots:
     void on_SearchSong_clicked();
     void on_SearchPlaylist_clicked();
 
+    void on_play_song_clicked();
+
+    void on_pause_song_clicked();
+
 private:
     Ui::PlaylistManagement *ui;
 
@@ -50,6 +56,9 @@ private:
     void refreshSongList(const Playlist &p);
     bool saveToFile(const QString &filename);
     bool loadFromFile(const QString &filename);
+
+    QMediaPlayer* player;
+    QAudioOutput* audioOutput;
 
     Playlist* getPlaylist(const QString &name);
 };
