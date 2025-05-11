@@ -8,6 +8,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QMessageBox>
+#include <QShowEvent>
 
 PlaylistManagement::PlaylistManagement(QString username, QWidget *parent)
     : QDialog(parent), ui(new Ui::PlaylistManagement), username(username)
@@ -35,9 +36,21 @@ PlaylistManagement::~PlaylistManagement()
 
 QMap<QString, QVector<Playlist>> PlaylistManagement::AllPlaylists;
 
+void PlaylistManagement::showEvent(QShowEvent *event) {
+    QDialog::showEvent(event);
+
+    // Syncing with the latest playlists
+    *playlists = AllPlaylists[username];
+
+    ui->listWidget_playlists->clear();
+    for (const Playlist& playlist : *playlists) {
+        ui->listWidget_playlists->addItem(playlist.getName());
+    }
+}
+
 Playlist* PlaylistManagement::getPlaylist(const QString &name)
 {
-    for (Playlist &p : *playlists)  // Dereference the pointer
+    for (Playlist &p : *playlists)
         if (p.getName() == name)
             return &p;
     return nullptr;
@@ -97,34 +110,6 @@ void PlaylistManagement::loadPlaylists() {
     }
 }
 
-/*
-void PlaylistManagement::saveAllPlaylists() {
-    for(auto it = AllPlaylists.begin(); it != AllPlaylists.end(); it++) {
-        QString username = it.key();
-        QString filePath = QCoreApplication::applicationDirPath() + "/../../data/playlists/" + username + "Playlists.txt";
-
-#ifdef Q_OS_MAC
-        if (!QFile::exists(filePath)) {
-            filePath = QCoreApplication::applicationDirPath() + "/../../../../../data/playlists/" + username + ".txt";
-        }
-#endif
-        QFile file(filePath);
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-            continue;
-
-        QTextStream output(&file);
-        for(const Playlist&playlist : it.value()) {
-            output << "#" << playlist.getName() << "\n";
-            for(const Song&song : playlist.getSongs()) {
-                output << song.getTitle() << "," << song.getArtist() << "," << song.getAlbum() << "," << song.getDuration() << "\n";
-            }
-        }
-
-        file.close();
-    }
-}
-*/
-
 void PlaylistManagement::saveAllPlaylists() {
     QString basePath = QCoreApplication::applicationDirPath() + "/../../data/playlists/";
 
@@ -135,9 +120,9 @@ void PlaylistManagement::saveAllPlaylists() {
     }
 #endif
 
-    for (auto it = AllPlaylists.begin(); it != AllPlaylists.end(); ++it) {
+    for (auto it = AllPlaylists.begin(); it != AllPlaylists.end(); it++) {
         QString username = it.key();
-        QString filePath = basePath + username + ".txt";  // ✅ Match the filename format used in loadPlaylists()
+        QString filePath = basePath + username + ".txt";  // Match the filename format used in loadPlaylists()
 
         QFile file(filePath);
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -290,9 +275,18 @@ void PlaylistManagement::on_RenamePlaylist_clicked() {
     Playlist* p = getPlaylist(currentItem->text());
     if (!p) return;
 
-    QString newName = QInputDialog::getText(this, "Rename Playlist", "New Name:");
-    if (newName.isEmpty())
+    QString newName = QInputDialog::getText(this, "Rename Playlist", "New Name:").trimmed();
+    if (newName.isEmpty()) {
+        QMessageBox::warning(this, "Empty Name", "Playlist name cannot be empty");
         return;
+    }
+
+    for (const Playlist& existingPlaylist : *playlists) {
+        if (existingPlaylist.getName() == newName && &existingPlaylist != p) {
+            QMessageBox::warning(this, "Duplicate Name", "A playlist with the name\"" + newName + "\" already exists.");
+            return;
+        }
+    }
 
     p->setName(newName);
     currentItem->setText(newName);

@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QListWidgetItem>
 #include <QWidget>
+#include <QShowEvent>
 #include "playlist.h"
 
 namespace Ui {
@@ -27,6 +28,7 @@ public:
 
 private slots:
     void on_pushButton_back_clicked();
+    void showEvent(QShowEvent *event) override; // to update playlists in case of going back from playlist creation page
     void on_createPlaylist_clicked();
     void on_listWidget_playlists_itemClicked(QListWidgetItem *item);
     void on_AddSong_clicked();
