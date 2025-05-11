@@ -59,7 +59,7 @@ void SongPage::loadSongs()
         QString duration = fields[3];
         QString artPath = (fields.size() >=5) ? fields[4] : "";
 
-        songLibrary.append(Song(title, artist, album, duration));
+        songLibrary.append(Song(title, artist, album, duration,artPath));
     }
 
     file.close();
@@ -96,12 +96,13 @@ void SongPage::on_pushButton_back_clicked()
 void SongPage::on_pushButton_displaySongs_clicked()
 {
     ui->tableWidget_songs->clear();
-    ui->tableWidget_songs->setColumnCount(4);
+    ui->tableWidget_songs->setColumnCount(5);
     ui->tableWidget_songs->setRowCount(songLibrary.size());
+ui->tableWidget_songs->setColumnWidth(4, 80);
 
     //setting column headers
     QStringList headers;
-    headers << "Title" << "Artist" << "Album" << "Duration";
+    headers << "Title" << "Artist" << "Album" << "Duration"<<"Artwork";
     ui->tableWidget_songs->setHorizontalHeaderLabels(headers);
 
     for(int i = 0; i < songLibrary.size(); i++){
@@ -109,6 +110,17 @@ void SongPage::on_pushButton_displaySongs_clicked()
         ui->tableWidget_songs->setItem(i, 1, new QTableWidgetItem(songLibrary[i].getArtist()));
         ui->tableWidget_songs->setItem(i, 2, new QTableWidgetItem(songLibrary[i].getAlbum()));
         ui->tableWidget_songs->setItem(i, 3, new QTableWidgetItem(songLibrary[i].getDuration()));
+        QString artPath = songLibrary[i].getAlbumArtPath();
+        if (!artPath.isEmpty()) {
+            QPixmap pixmap(artPath);
+            QPixmap scaled = pixmap.scaled(50, 80, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            QLabel* imageLabel = new QLabel();
+            imageLabel->setPixmap(scaled);
+            imageLabel->setAlignment(Qt::AlignCenter);
+            ui->tableWidget_songs->setCellWidget(i, 4, imageLabel);
+        } else {
+            ui->tableWidget_songs->setItem(i, 4, new QTableWidgetItem("No Art"));
+        }
     }
 }
 
@@ -124,7 +136,7 @@ void SongPage::on_pushButton_addToSongLibrary_clicked()
         return;
     }
 
-    QString filePath = QCoreApplication::applicationDirPath() + "/songs.txt";
+    QString filePath = QCoreApplication::applicationDirPath() + "/../../../songs.txt";
     if (!QFile::exists(filePath)) {
 #ifdef Q_OS_MAC
         filePath = QCoreApplication::applicationDirPath() + "/../../../../../songs.txt";
@@ -146,6 +158,8 @@ void SongPage::on_pushButton_addToSongLibrary_clicked()
     ui->lineEdit_artist->clear();
     ui->lineEdit_album->clear();
     ui->lineEdit_duration->clear();
+    uploadedImagePath.clear();
+    ui->label_albumArtPreview->clear();
 }
 
 void SongPage::on_pushButton_uploadArtwork_clicked()
