@@ -322,3 +322,32 @@ void PlaylistManagement::on_DeletePlaylist_clicked() {
 }
 
 
+
+void PlaylistManagement::on_SearchSong_clicked()
+{
+    QString searchTitle = QInputDialog::getText(this, "Search Song", "Enter Song Title:");
+    if (searchTitle.trimmed().isEmpty()) {
+        QMessageBox::warning(this, "Input Error", "Please enter a song title.");
+        return;
+    }
+
+    QStringList matchingPlaylists;
+
+    for (const Playlist &playlist : *playlists) {
+        for (const Song &song : playlist.getSongs()) {
+            if (song.getTitle().compare(searchTitle, Qt::CaseInsensitive) == 0) {
+                matchingPlaylists.append(playlist.getName());
+                break;
+            }
+        }
+    }
+
+    if (matchingPlaylists.isEmpty()) {
+        QMessageBox::information(this, "Not Found",
+                                 "No song with title \"" + searchTitle + "\" was found.");
+    } else {
+        QString message = "The song \"" + searchTitle + "\" was found in:\n"
+                          + matchingPlaylists.join("\n");
+        QMessageBox::information(this, "Song Found", message);
+    }
+}

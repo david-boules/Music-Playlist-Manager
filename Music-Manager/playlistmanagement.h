@@ -35,6 +35,8 @@ private slots:
     void on_DeleteSong_clicked();
     void on_RenamePlaylist_clicked();
     void on_DeletePlaylist_clicked();
+    void on_SearchSong_clicked();
+
 
 private:
     Ui::PlaylistManagement *ui;

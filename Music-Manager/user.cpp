@@ -16,15 +16,17 @@ using namespace std;
 
 QMap<QString, UserInfo> User::UsersList;
 
-User::User(QString username, QString password, QWidget *parent) : QDialog(parent) , ui(new Ui::User)
+User::User(QString username, QString password, PlaylistManagement* playlist, QWidget *parent) : QDialog(parent) , ui(new Ui::User),playlist1(playlist)
 {
     ui->setupUi(this);
     ui->label_welcome->setText("Welcome, " + username + "!");
-   // ui->label_totalPlaylists->setText("Total Playlists :" +QString::number(playlist1->total_playlists()) );
+
+    ui->label_totalPlaylists->setText("Total Playlists :" +QString::number(playlist1->total_playlists()) );
 
     // temporary: so unfinished functions do not cause errors
     UserName = username;
     Password = password;
+
 }
 User::~User()
 {

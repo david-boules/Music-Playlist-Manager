@@ -46,7 +46,9 @@ void MainWindow::on_PushButton_login_clicked()
     else {
         QMessageBox::information(this, "Login", "User Login Successful");
         hide();
-        User *u = new User(username, password, this);
+        PlaylistManagement* playlist = new PlaylistManagement(username);
+        User *u = new User(username, password, playlist);
+        //User *u = new User(username, password, this);
         u->show();
     }
 }
@@ -63,6 +65,10 @@ void MainWindow::on_switch2_clicked()
                 "QWidget { background-color: #121212; color: white; }"
                 "QPushButton { background-color: #1e1e1e; color: white;}"
                 "QListWidget {background-color: #808080; color: white; }"
+                "#groupBox_summary { border: 1px solid #ffffff; border-radius: 5px;  }"
+                "#login_groupbox { border: 1px solid #ffffff; border-radius: 5px; }"
+                 "#groupBox { border: 1px solid #ffffff; border-radius: 5px; }"
+                "#groupBox_2 { border: 1px solid #ffffff; border-radius: 5px; }"
                 "QLineEdit, QTextEdit { background-color: #2e2e2e; color: white;  }"
                 );
             isDarkMode = true;

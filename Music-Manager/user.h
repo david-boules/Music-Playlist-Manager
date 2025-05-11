@@ -23,7 +23,7 @@ class User : public QDialog
     Q_OBJECT
 
 public:
-    explicit User(QString username, QString password, QWidget *parent = nullptr);
+    explicit User(QString username, QString password,PlaylistManagement* playlist, QWidget *parent = nullptr);
 
     static bool validateCredentials(const QString &username, const QString &password);
     static bool usernameExists(const QString& username);
@@ -60,6 +60,7 @@ private:
     QString UserName; // temporary
     QString Password; // temporary
     SongPage song_page;
+    PlaylistManagement* playlist1;
 
     static QMap<QString, UserInfo> UsersList; // 'UsersList' - Data structure to store and handle users (for milestone 2)
 };

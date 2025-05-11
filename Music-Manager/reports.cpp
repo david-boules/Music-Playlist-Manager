@@ -22,3 +22,9 @@ void Reports::on_pushButton_back_clicked()
         parentWidget()->show(); //therefore can be used to go back
     }
 }
+
+void Reports::on_pushButton_clicked()
+{
+
+}
+
