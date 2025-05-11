@@ -2,6 +2,7 @@
 #include "ui_playlistmanagement.h"
 #include "playlist.h"
 #include "playlistcreator.h"
+#include "songpage.h"
 #include <QInputDialog>
 #include <QDir>
 #include <QStringList>
@@ -191,6 +192,7 @@ void PlaylistManagement::on_listWidget_playlists_itemClicked(QListWidgetItem *it
 }
 
 void PlaylistManagement::on_AddSong_clicked() {
+
     QListWidgetItem* currentItem = ui->listWidget_playlists->currentItem();
     if (!currentItem) {
         QMessageBox::warning(this, "No Playlist", "Please select a playlist to add a song.");
@@ -202,66 +204,64 @@ void PlaylistManagement::on_AddSong_clicked() {
         return;
 
     QString title = QInputDialog::getText(this, "Add Song", "Enter Song Title:");
-    if (title.trimmed().isEmpty())
-        return;
-
-    QString songPath = QCoreApplication::applicationDirPath() + "/../../data/songs.txt";
-    QFile file(songPath);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QMessageBox::critical(this, "Error", "Could not open song library.");
+    if (title.trimmed().isEmpty()) {
+        QMessageBox::warning(this, "Error", "Song title cannot be empty.");
         return;
     }
 
-    QTextStream in(&file);
+    const QVector<Song>& library = SongPage::getSongLibrary();
     bool found = false;
     Song foundSong;
 
-    while (!in.atEnd()) {
-        QString line = in.readLine().trimmed();
-        QStringList parts = line.split(",");
-        if (parts.size() == 4 && parts[0].compare(title, Qt::CaseInsensitive) == 0) {
-            foundSong = Song(parts[0], parts[1], parts[2], parts[3]);
+    // Checking if the song is in the song library
+    for (const Song& song : library) {
+        if (song.getTitle().compare(title, Qt::CaseInsensitive) == 0) { // Case-Insensitivity for adding songs
+            foundSong = song;
             found = true;
             break;
         }
     }
-
-    file.close();
-
     if (!found) {
         QMessageBox::warning(this, "Not Found", "Song not found in library.");
         return;
     }
 
+    // Prevent adding a duplicate song
+    for (const Song& s : p->getSongs()) {
+        if (s == foundSong) {
+            QMessageBox::warning(this, "Duplicate Song", "This song already exists in the playlist.");
+            return;
+        }
+    }
+
+    // Add the song to the playlist
     p->addSong(foundSong);
-    saveAllPlaylists();
     on_listWidget_playlists_itemClicked(currentItem); // Refresh view
 }
 
 void PlaylistManagement::on_DeleteSong_clicked() {
     QListWidgetItem* currentItem = ui->listWidget_playlists->currentItem();
-    if (!currentItem)
+    if (!currentItem) {
+        QMessageBox::warning(this, "Error", "No playlist selected");
         return;
-
+    }
     Playlist* p = getPlaylist(currentItem->text());
     if (!p)
         return;
 
     int row = ui->tableWidget_songs->currentRow();
-    if (row < 0 || row >= p->getSongs().size())
+    if (row < 0 || row >= p->getSongs().size()) {
+        QMessageBox::warning(this, "Error", "No song selected");
         return;
+    }
 
     // To prevent deleting the last song and having an empty playlist
     if (p->getSongs().size() == 1) {
-        QMessageBox::warning(this, "Not Allowed",
-                             "Playlists must contain at least one song.\nYou cannot delete the last song.");
+        QMessageBox::warning(this, "Not Allowed", "Playlists must contain at least one song.");
         return;
     }
 
     p->removeSong(row);
-
-    saveAllPlaylists();
-
     // Refresh the view
     on_listWidget_playlists_itemClicked(currentItem);
 }
@@ -290,8 +290,6 @@ void PlaylistManagement::on_RenamePlaylist_clicked() {
 
     p->setName(newName);
     currentItem->setText(newName);
-
-    saveAllPlaylists();
 }
 
 void PlaylistManagement::on_DeletePlaylist_clicked() {
@@ -324,8 +322,6 @@ void PlaylistManagement::on_DeletePlaylist_clicked() {
     // Clear songs table
     ui->tableWidget_songs->clearContents();
     ui->tableWidget_songs->setRowCount(0);
-
-    saveAllPlaylists();
 
     QMessageBox::information(this, "Deleted", "Playlist \"" + playlistName + "\" is deleted.");
 }

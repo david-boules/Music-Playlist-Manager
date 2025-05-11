@@ -58,10 +58,8 @@ void User::loadUsers() {
 #endif
     }
 
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Cannot open users.txt for reading.";
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return;
-    }
 
     QTextStream in(&file);
     while (!in.atEnd()) {
@@ -69,11 +67,7 @@ void User::loadUsers() {
         if (line.isEmpty()) continue;
 
         QStringList fields = line.split(' ');
-        if (fields.size() < 4) {
-            qDebug() << "Invalid line format:" << line;
-            continue;
-        }
-
+        if (fields.size() < 4) continue;
         UserInfo info;
         info.password = fields[1];
         info.email = fields[2];
@@ -133,7 +127,6 @@ bool User::addUser(const QString& username, const QString& password, const QStri
 bool User::deleteUser(const QString& username, const QString& password) {
 
     if (!UsersList.contains(username) || UsersList[username].password != password) {
-        qDebug() << "Username not found in UsersList.";
         return false;
     }
 

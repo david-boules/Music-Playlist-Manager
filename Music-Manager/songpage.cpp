@@ -37,12 +37,9 @@ void SongPage::loadSongs()
         file.setFileName(filePath);
 #endif
     }
-    qDebug() << "Trying to open:" << file.fileName();
 
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Cannot open songs.txt for reading.";
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return;
-    }
 
     QTextStream in(&file);
     while (!in.atEnd()) {
