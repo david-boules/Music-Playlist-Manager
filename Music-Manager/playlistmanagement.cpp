@@ -2,6 +2,7 @@
 #include "ui_playlistmanagement.h"
 #include "playlist.h"
 #include "playlistcreator.h"
+#include "user.h"
 #include "songpage.h"
 #include <QInputDialog>
 #include <QDir>
@@ -31,8 +32,6 @@ PlaylistManagement::PlaylistManagement(QString username, QWidget *parent)
 
     ui->tableWidget_songs->setColumnCount(4);
     ui->tableWidget_songs->setHorizontalHeaderLabels({"Title", "Artist", "Album", "Duration"});
-
-    //loadPlaylistsToText();
 }
 
 PlaylistManagement::~PlaylistManagement()
@@ -114,8 +113,12 @@ void PlaylistManagement::loadPlaylists() {
 
             } else if (current) {
                 QStringList parts = line.split(",");
-                if (parts.size() == 4)
-                    current->addSong(Song(parts[0], parts[1], parts[2], parts[3]));
+                if (parts.size() >= 4) {
+                    Song song(parts[0], parts[1], parts[2], parts[3]);
+                    if (parts.size() == 5)
+                        song.setPlayCount(parts[4].toInt());
+                    current->addSong(song);
+                }
             }
         }
 
@@ -127,35 +130,6 @@ void PlaylistManagement::loadPlaylists() {
         file.close();
     }
 }
-
-/*
-void PlaylistManagement::saveAllPlaylists() {
-    for(auto it = AllPlaylists.begin(); it != AllPlaylists.end(); it++) {
-        QString username = it.key();
-        QString filePath = QCoreApplication::applicationDirPath() + "/../../../data/playlists/" + username + "Playlists.txt";
-
-#ifdef Q_OS_MAC
-        if (!QFile::exists(filePath)) {
-            filePath = QCoreApplication::applicationDirPath() + "/../../../../../data/playlists/" + username + ".txt";
-        }
-#endif
-        QFile file(filePath);
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-            continue;
-
-        QTextStream output(&file);
-        for(const Playlist&playlist : it.value()) {
-            output << "#" << playlist.getName() << "\n";
-            for(const Song&song : playlist.getSongs()) {
-                output << song.getTitle() << "," << song.getArtist() << "," << song.getAlbum() << "," << song.getDuration() << "\n";
-            }
-        }
-
-        file.close();
-    }
-}
-*/
-
 
 void PlaylistManagement::saveAllPlaylists() {
     QString basePath = QCoreApplication::applicationDirPath() + "/../../../data/playlists/";
@@ -179,7 +153,7 @@ void PlaylistManagement::saveAllPlaylists() {
         for (const Playlist &playlist : it.value()) {
             output << "#" << playlist.getName() << "\n";
             for (const Song &song : playlist.getSongs()) {
-                output << song.getTitle() << "," << song.getArtist() << "," << song.getAlbum() << "," << song.getDuration() << "\n";
+                output << song.getTitle() << "," << song.getArtist() << "," << song.getAlbum() << "," << song.getDuration() << "," << song.getPlayCount() <<"\n";
             }
         }
 
@@ -433,6 +407,8 @@ void PlaylistManagement::on_play_song_clicked() {
 
     player->setSource(QUrl::fromLocalFile(songPath));
     player->play();
+    User::setLastPlayed(username, songTitle);
+    playlist->getSongsIncrement()[selectedRow].incrementPlayCount();
 
     QMessageBox::information(this, "Now Playing", "🎵 " + songTitle);
 }

@@ -47,7 +47,7 @@ void MainWindow::on_PushButton_login_clicked()
         QMessageBox::information(this, "Login", "User Login Successful");
         hide();
         PlaylistManagement* playlist = new PlaylistManagement(username);
-        User *u = new User(username, password, playlist);
+        User *u = new User(username, password, playlist, this);
         //User *u = new User(username, password, this);
         u->show();
     }

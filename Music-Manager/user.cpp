@@ -289,4 +289,12 @@ void User::on_pushButton_back_clicked()
     }
 }
 
+void User::showEvent(QShowEvent* event) {
+    QDialog::showEvent(event); // Always call base implementation first
 
+    int count = playlist1->total_playlists();
+    ui->label_totalPlaylists->setText("Total Playlists: " + QString::number(count));
+
+    QString lastPlayed = User::getLastPlayed(UserName);
+    ui->label_lastPlayedSong->setText("Last Played: " + lastPlayed);
+}

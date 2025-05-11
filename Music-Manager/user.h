@@ -36,6 +36,12 @@ public:
 
     static void loadUsers();
     static void saveUsers();
+    static void loadLastPlayedSongs();
+    static void saveLastPlayedSongs();
+
+    static void setLastPlayed(const QString& username, const QString& song);
+    static QString getLastPlayed(const QString& username);
+
     QString get_username(){
         return UserName;
     }
@@ -51,6 +57,7 @@ public:
 
 private slots:
 
+    void showEvent(QShowEvent *event) override; // to update elements of the user dashboard in case of going back to this page
     void on_viewPlaylists_clicked();
     void on_userReports_clicked();
     void on_searchSongs_clicked();
@@ -58,12 +65,13 @@ private slots:
 
 private:
     Ui::User *ui;
-    QString UserName; // temporary
-    QString Password; // temporary
+    QString UserName;
+    QString Password;
     SongPage song_page;
     PlaylistManagement* playlist1;
+    static QMap<QString, QString> LastPlayedMap;
 
-    static QMap<QString, UserInfo> UsersList; // 'UsersList' - Data structure to store and handle users (for milestone 2)
+    static QMap<QString, UserInfo> UsersList;
 };
 
 #endif // USER_H

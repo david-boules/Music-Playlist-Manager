@@ -35,6 +35,10 @@ const QVector<Song>& Playlist::getSongs() const {
     return songs;
 }
 
+QVector<Song>& Playlist::getSongsIncrement() { // A specific getter for incrementing play count in playlistmanagement.cpp
+    return songs;
+}
+
 int Playlist::numSongs() const {
     return songs.size();
 }

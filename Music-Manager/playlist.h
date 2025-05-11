@@ -19,7 +19,8 @@ public:
 
 
     QString getName() const;
-    const QVector<Song>& getSongs() const;
+    const QVector<Song>& getSongs() const; // Non-const since play counts need to be updated
+    QVector<Song>& getSongsIncrement();
 
 private:
     QString name;

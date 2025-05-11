@@ -112,7 +112,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="export_txt">
    <property name="geometry">
     <rect>
      <x>60</x>
@@ -125,7 +125,7 @@
     <string>Export as .txt</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="export_csv">
    <property name="geometry">
     <rect>
      <x>240</x>

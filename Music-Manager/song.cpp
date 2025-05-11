@@ -1,7 +1,7 @@
 #include "song.h"
 
-Song::Song(QString name, QString songwriter, QString alb, QString time, QString artPath)
-    : title(name), artist(songwriter), album(alb), duration(time), albumArtPath(artPath) {}
+Song::Song(QString name, QString songwriter, QString alb, QString time, QString artPath, int count)
+    : title(name), artist(songwriter), album(alb), duration(time), albumArtPath(artPath), playCount(count) {}
 
 bool Song::operator==(const Song& other) const {
     return title == other.title && artist == other.artist;
@@ -29,4 +29,16 @@ QString Song::getAlbumArtPath() const {
 
 void Song::setAlbumArtPath(const QString& path) {
     albumArtPath = path;
+}
+
+int Song::getPlayCount() const {
+    return playCount;
+}
+
+void Song::incrementPlayCount() {
+    playCount++;
+}
+
+void Song::setPlayCount(int count) {
+    playCount = count;
 }
