@@ -48,10 +48,7 @@ void SongPage::loadSongs()
 
         QStringList fields = line.split(',');
 
-        if (fields.size() < 4) {
-            qDebug() << "Invalid line format:" << line;
-            continue;
-        }
+        if (fields.size() < 4) continue;
 
         QString title = fields[0];
         QString artist = fields[1];

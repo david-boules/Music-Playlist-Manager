@@ -16,6 +16,8 @@
 *_resource.rc
 Music-Manager.pro.user
 Music-Manager.pro.qtds
+milestone_documents/
+screenshots/
 *.qm
 .#*
 *.*#

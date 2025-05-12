@@ -50,7 +50,6 @@ public:
         return UserName;
     }
 
-    QString getLastPlayedSong();
     int getAllPlaylists();
 
     ~User();

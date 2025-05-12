@@ -4,13 +4,13 @@ Qadeyet Am Ahmed,Omar Khairat,Am Ahmed,5:36,3
 Nassam Alayna El Hawa,Fairuz,Bent El Hares,4:03,4
 #Classic Songs
 Bad,Michael Jackson,Bad 25th Anniversary,4:08,0
-Gangsta's Paradise,Coolio,Gangsta's Paradise,4:01,5
+Gangsta's Paradise,Coolio,Gangsta's Paradise,4:01,6
 Daddy Cool,Boney M.,Take The Heat Off Me,3:29,0
 Careless Whisper,George Michael,Ladies & Gentlemen,5:00,0
-Sway,Michael Bublé,Michael Bublé,3:08,2
+Sway,Michael Bublé,Michael Bublé,3:08,3
 Billie Jean,Michael Jackson,Thriller,4:54,0
-#Cool
-Live in the Moment,Portugal. The Man,Woodstock,4:07,1
-Never Gonna Give You Up,Rick Astley,Whenever You Need Somebody,3:34,1
-Way down We Go,KALEO,A/B,3:34,0
+#Favorites
+Nour El Ein,Amr Diab,Nour El Ein,5:08,0
 Gangsta's Paradise,Coolio,Gangsta's Paradise,4:01,0
+El Bent El Shalabeya,Fairuz,Fairouz We El Zekrayat,3:09,0
+Never Gonna Give You Up,Rick Astley,Whenever You Need Somebody,3:34,0

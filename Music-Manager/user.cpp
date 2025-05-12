@@ -14,8 +14,6 @@
 #include <QMediaMetaData>
 #include <QAudioOutput>
 
-using namespace std;
-
 QMap<QString, UserInfo> User::UsersList;
 
 User::User(QString username, QString password, PlaylistManagement* playlist, QWidget *parent) : QDialog(parent) , ui(new Ui::User),playlist1(playlist)
@@ -43,16 +41,6 @@ User::~User()
 {
     delete ui;
 }
-
-/* Functions concerning User Storage
- * usernameExists
- * loadUsers
- * saveUsers
- * validateCredentials
- * addUser
- * deleteUser
- * getUserRole
- */
 
 // Check for existing username
 bool User::usernameExists(const QString& username) {
@@ -203,22 +191,6 @@ QMap<QString, UserInfo> User::getAllUsers() {
  * getLastPlayedSong
  * getAllPlaylists
  */
-
-QString User::getLastPlayedSong() {
-    //Create the filename where last played songs are stored for this user
-    QFile file(UserName + ".txt");
-
-    QTextStream in(&file); //Textstream to read the file
-    QString last;
-
-    // Read the file line by line; each line is assumed to be a song title
-    while (!in.atEnd()) {
-        last = in.readLine().trimmed(); // Keep updating 'last' with the newest line
-    }
-
-    // If the file is empty, return "N/A"
-    return last.isEmpty() ? "N/A" : last;
-}
 
 void User::setLastPlayed(const QString& username, const QString& song) {
     LastPlayedMap[username] = song.trimmed();
