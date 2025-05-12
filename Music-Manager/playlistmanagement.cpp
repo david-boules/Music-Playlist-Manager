@@ -446,6 +446,12 @@ void PlaylistManagement::on_play_song_clicked() {
 
 void PlaylistManagement::on_pause_song_clicked()
 {
-    player->pause();
+    if(player->playbackState() == QMediaPlayer::PlayingState) {
+        player->pause();
+        ui->pause_song->setText("Resume Song");
+    } else if (player->playbackState() == QMediaPlayer::PausedState) {
+        player->play();
+        ui->pause_song->setText("Pause Song");
+    }
 }
 

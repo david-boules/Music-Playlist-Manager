@@ -288,8 +288,8 @@ void User::on_userReports_clicked()
 }
 
 void User::on_searchSongs_clicked() {
-    QString songToFind = QInputDialog::getText(this, "Search Songs", "Enter Song Title:");
-    if (songToFind.trimmed().isEmpty()) {
+    QString songToFind = QInputDialog::getText(this, "Search Songs", "Enter Song Title:").trimmed();
+    if (songToFind.isEmpty()) {
         QMessageBox::warning(this, "Input Error", "Song title is empty.");
         return;
     }

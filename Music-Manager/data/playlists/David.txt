@@ -1,7 +1,7 @@
 #Arabic Songs
 Nour El Ein,Amr Diab,Nour El Ein,5:08,1
-Qadeyet Am Ahmed,Omar Khairat,Am Ahmed,5:36,2
-Nassam Alayna El Hawa,Fairuz,Bent El Hares,4:03,3
+Qadeyet Am Ahmed,Omar Khairat,Am Ahmed,5:36,3
+Nassam Alayna El Hawa,Fairuz,Bent El Hares,4:03,4
 #Classic Songs
 Bad,Michael Jackson,Bad 25th Anniversary,4:08,0
 Gangsta's Paradise,Coolio,Gangsta's Paradise,4:01,5
