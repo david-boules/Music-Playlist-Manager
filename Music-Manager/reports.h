@@ -15,10 +15,18 @@ class Reports : public QDialog
 
 public:
     explicit Reports(User* current_user,PlaylistManagement* current_playlist, QWidget *parent = nullptr);
+
+    QString getMostPlayedSongs();
+    void displayPopularSongs();
+
     ~Reports();
 
 private slots:
     void on_pushButton_back_clicked();
+
+    void on_export_txt_clicked();
+
+    void on_export_csv_clicked();
 
 private:
     Ui::Reports *ui;

@@ -56,7 +56,7 @@ void PlaylistCreator::on_createPlaylist_clicked()
         return;
     }
 
-    const QVector<Playlist>& existingPlaylists = PlaylistManagement::getUserPlaylist(user);
+    const QVector<Playlist>& existingPlaylists = PlaylistManagement::getUserPlaylists(user);
     for (const Playlist& playlist: existingPlaylists) {
         if (playlist.getName() == playlistName) {
             QMessageBox::warning(this, "Duplicate Name", "A playlist with the name\"" + playlistName + "\" already exists.");

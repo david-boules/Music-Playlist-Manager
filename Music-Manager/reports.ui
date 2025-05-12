@@ -13,12 +13,12 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="label_title">
    <property name="geometry">
     <rect>
      <x>130</x>
      <y>10</y>
-     <width>161</width>
+     <width>231</width>
      <height>21</height>
     </rect>
    </property>
@@ -46,7 +46,7 @@
     <string>Back</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_2">
+  <widget class="QLabel" name="label_username">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -65,7 +65,7 @@
     <string>Username: (username)</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_3">
+  <widget class="QLabel" name="label_totalPlaylists">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -101,7 +101,7 @@
    <property name="title">
     <string>Most Played Songs:</string>
    </property>
-   <widget class="QTableWidget" name="tableWidget">
+   <widget class="QTableWidget" name="tableWidget_mostPlayedSongs">
     <property name="geometry">
      <rect>
       <x>0</x>

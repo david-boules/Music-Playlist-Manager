@@ -32,6 +32,7 @@ PlaylistManagement::PlaylistManagement(QString username, QWidget *parent)
 
     ui->tableWidget_songs->setColumnCount(4);
     ui->tableWidget_songs->setHorizontalHeaderLabels({"Title", "Artist", "Album", "Duration"});
+
 }
 
 PlaylistManagement::~PlaylistManagement()
@@ -162,7 +163,7 @@ void PlaylistManagement::saveAllPlaylists() {
 }
 
 
-const QVector<Playlist>& PlaylistManagement::getUserPlaylist(const QString& username){
+const QVector<Playlist>& PlaylistManagement::getUserPlaylists(const QString& username){
     return AllPlaylists[username];
 
 }
@@ -408,7 +409,8 @@ void PlaylistManagement::on_play_song_clicked() {
     player->setSource(QUrl::fromLocalFile(songPath));
     player->play();
     User::setLastPlayed(username, songTitle);
-    playlist->getSongsIncrement()[selectedRow].incrementPlayCount();
+    User::setLastPlaylist(username, selectedPlaylist->text());
+    playlist->getSongsIncrement()[selectedRow].incrementPlayCount();    
 
     QMessageBox::information(this, "Now Playing", "🎵 " + songTitle);
 }

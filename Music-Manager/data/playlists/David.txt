@@ -1,10 +1,10 @@
 #Arabic Songs
-Nour El Ein,Amr Diab,Nour El Ein,5:08,0
-Qadeyet Am Ahmed,Omar Khairat,Am Ahmed,5:36,1
-Nassam Alayna El Hawa,Fairuz,Bent El Hares,4:03,2
+Nour El Ein,Amr Diab,Nour El Ein,5:08,1
+Qadeyet Am Ahmed,Omar Khairat,Am Ahmed,5:36,2
+Nassam Alayna El Hawa,Fairuz,Bent El Hares,4:03,3
 #Classic Songs
 Bad,Michael Jackson,Bad 25th Anniversary,4:08,0
-Gangsta's Paradise,Coolio,Gangsta's Paradise,4:01,3
+Gangsta's Paradise,Coolio,Gangsta's Paradise,4:01,5
 Daddy Cool,Boney M.,Take The Heat Off Me,3:29,0
 Careless Whisper,George Michael,Ladies & Gentlemen,5:00,0
 Sway,Michael Bublé,Michael Bublé,3:08,2

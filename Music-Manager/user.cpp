@@ -31,8 +31,14 @@ User::User(QString username, QString password, PlaylistManagement* playlist, QWi
 
     QString lastPlayed = User::getLastPlayed(UserName);
     ui->label_lastPlayedSong->setText("Last Played: " + lastPlayed);
+    ui->label_lastPlaylistAccessed->setText("Last Playlist Accessed: " + User::getLastPlaylist(UserName));
+
 
 }
+
+QMap<QString, QString> User::LastPlayedMap;
+QMap<QString, QString> User::LastPlaylistMap;
+
 User::~User()
 {
     delete ui;
@@ -113,7 +119,6 @@ void User::saveUsers() {
     file.close();
 }
 
-QMap<QString, QString> User::LastPlayedMap;
 void User::loadLastPlayedSongs() {
     QString path = QCoreApplication::applicationDirPath() + "/../../../data/lastPlayed.txt";
 #ifdef Q_OS_MAC
@@ -215,16 +220,6 @@ QString User::getLastPlayedSong() {
     return last.isEmpty() ? "N/A" : last;
 }
 
-// type changed to int?? Or do we use QString??
-int User::getAllPlaylists() {
-    QDir dir(QCoreApplication::applicationDirPath()); //Get the path to the directory where the app is running
-
-    //Find all files that match the pattern "UserName_*.txt"; assume playlists are stored as individual text files for each user
-    QStringList files = dir.entryList(QStringList() << UserName + "_*.txt", QDir::Files);
-
-    return files.count(); ;
-}
-
 void User::setLastPlayed(const QString& username, const QString& song) {
     LastPlayedMap[username] = song.trimmed();
 }
@@ -232,6 +227,51 @@ void User::setLastPlayed(const QString& username, const QString& song) {
 QString User::getLastPlayed(const QString& username) {
     return LastPlayedMap.value(username, "N/A");
 }
+
+void User::setLastPlaylist(const QString& username, const QString& playlist) {
+    LastPlaylistMap[username] = playlist.trimmed();
+}
+
+QString User::getLastPlaylist(const QString& username) {
+    return LastPlaylistMap.value(username, "N/A");
+}
+
+void User::loadLastPlaylist() {
+    QString path = QCoreApplication::applicationDirPath() + "/../../../data/lastPlaylist.txt";
+#ifdef Q_OS_MAC
+    if (!QFile::exists(path))
+        path = QCoreApplication::applicationDirPath() + "/../../../../../data/lastPlaylist.txt";
+#endif
+
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
+
+    QTextStream in(&file);
+    while (!in.atEnd()) {
+        QString line = in.readLine().trimmed();
+        QStringList parts = line.split(' ', Qt::SkipEmptyParts);
+        if (parts.size() >= 2)
+            LastPlaylistMap[parts[0]] = parts.mid(1).join(" ");
+    }
+    file.close();
+}
+
+void User::saveLastPlaylist() {
+    QString path = QCoreApplication::applicationDirPath() + "/../../../data/lastPlaylist.txt";
+#ifdef Q_OS_MAC
+    path = QCoreApplication::applicationDirPath() + "/../../../../../data/lastPlaylist.txt";
+#endif
+
+    QFile file(path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) return;
+
+    QTextStream out(&file);
+    for (auto it = LastPlaylistMap.begin(); it != LastPlaylistMap.end(); ++it) {
+        out << it.key() << " " << it.value().trimmed() << "\n";
+    }
+    file.close();
+}
+
 
 /* Functions for page navigation / pop-ups
  * on_userReports_clicked
@@ -254,7 +294,7 @@ void User::on_searchSongs_clicked() {
         return;
     }
 
-    const QVector<Playlist>& userPlaylists = PlaylistManagement::getUserPlaylist(UserName);
+    const QVector<Playlist>& userPlaylists = PlaylistManagement::getUserPlaylists(UserName);
     QStringList foundIn;
 
     for (const Playlist& playlist : userPlaylists) {

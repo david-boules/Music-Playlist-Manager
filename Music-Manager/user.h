@@ -38,17 +38,17 @@ public:
     static void saveUsers();
     static void loadLastPlayedSongs();
     static void saveLastPlayedSongs();
+    static void loadLastPlaylist();
+    static void saveLastPlaylist();
 
     static void setLastPlayed(const QString& username, const QString& song);
     static QString getLastPlayed(const QString& username);
+    static void setLastPlaylist(const QString& username, const QString& playlist);
+    static QString getLastPlaylist(const QString& username);
 
     QString get_username(){
         return UserName;
     }
-    QString get_total_playlists{
-       // return ;
-    };
-
 
     QString getLastPlayedSong();
     int getAllPlaylists();
@@ -70,6 +70,8 @@ private:
     SongPage song_page;
     PlaylistManagement* playlist1;
     static QMap<QString, QString> LastPlayedMap;
+    static QMap<QString, QString> LastPlaylistMap;
+
 
     static QMap<QString, UserInfo> UsersList;
 };
