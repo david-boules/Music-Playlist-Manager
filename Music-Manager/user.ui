@@ -76,8 +76,8 @@
     <rect>
      <x>20</x>
      <y>130</y>
-     <width>271</width>
-     <height>201</height>
+     <width>301</width>
+     <height>221</height>
     </rect>
    </property>
    <property name="font">
@@ -89,39 +89,13 @@
    <property name="title">
     <string>Summary Statistics</string>
    </property>
-   <widget class="QLabel" name="label_totalPlaylists">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>30</y>
-      <width>241</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Total Playlists: N/A</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_lastPlaylistAccessed">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>55</y>
-      <width>251</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Last Playlist Accessed: N/A</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="userReports">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>110</y>
-      <width>147</width>
-      <height>40</height>
+      <x>60</x>
+      <y>130</y>
+      <width>171</width>
+      <height>51</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -140,13 +114,39 @@
      <string>User Reports</string>
     </property>
    </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>30</y>
+      <width>271</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="label_totalPlaylists">
+       <property name="text">
+        <string>Total Playlists: N/A</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_lastPlaylistAccessed">
+       <property name="text">
+        <string>Last Playlist: N/A</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QWidget" name="gridLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>300</x>
+     <x>330</x>
      <y>130</y>
-     <width>311</width>
+     <width>291</width>
      <height>221</height>
     </rect>
    </property>

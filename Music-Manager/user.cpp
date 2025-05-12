@@ -31,7 +31,7 @@ User::User(QString username, QString password, PlaylistManagement* playlist, QWi
 
     QString lastPlayed = User::getLastPlayed(UserName);
     ui->label_lastPlayedSong->setText("Last Played: " + lastPlayed);
-    ui->label_lastPlaylistAccessed->setText("Last Playlist Accessed: " + User::getLastPlaylist(UserName));
+    ui->label_lastPlaylistAccessed->setText("Last Playlist: " + getLastPlaylist(UserName));
 
 
 }

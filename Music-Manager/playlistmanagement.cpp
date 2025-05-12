@@ -351,11 +351,39 @@ void PlaylistManagement::on_DeletePlaylist_clicked() {
 
 void PlaylistManagement::on_SearchSong_clicked()
 {
+    QListWidgetItem* selectedPlaylist = ui->listWidget_playlists->currentItem();
+    if(!selectedPlaylist) {
+        QMessageBox::warning(this, "Selection Error", "Please select a playlist to search within.");
+        return;
+    }
+
+    QString songToFind = QInputDialog::getText(this, "Search Songs", "Enter Song Title:");
+    if (songToFind.trimmed().isEmpty()) {
+        QMessageBox::warning(this, "Input Error", "Song title is empty.");
+        return;
+    }
+
+    Playlist* playlist = getPlaylist(selectedPlaylist->text());
+    if(!playlist) return;
+
+    bool found = false;
+    for(const Song& song : playlist->getSongs()) {
+        if(song.getTitle().compare(songToFind, Qt::CaseInsensitive)==0) {
+            found = true;
+            break;
+        }
+    }
+
+    if (found) {
+        QMessageBox::information(this, "Song Found", songToFind + "\" exists in \"" + playlist->getName() + "\".");
+    } else {
+        QMessageBox::information(this, "Not Found", songToFind + "\" was not found in playlist \"" + playlist->getName() + "\".");
+    }
 
 }
 
 void PlaylistManagement::on_SearchPlaylist_clicked()
-{
+{   
     QString name = QInputDialog::getText(this, "Search Playlist", "Enter Playlist Name:");
     if (name.trimmed().isEmpty()) {
         QMessageBox::warning(this, "Input Error", "Please enter a playlist name.");
